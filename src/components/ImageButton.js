@@ -42,10 +42,7 @@ export default class ImageButton extends Component {
         this.clickHandler = this.clickHandler.bind(this);
     }
     clickHandler (event) {
-        console.log("ImageButton.clickHandler called.")
-        console.log(this.props)
-        return this.props.onClick(event);
-            
+        return this.props.onClick(event);   
     }
     render() {
         return (

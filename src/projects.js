@@ -1,5 +1,3 @@
-import papyracyImage from "./images/Papyracy128.png";
-
 const projects = [
 	{
 		title: "devicon-react-svg",

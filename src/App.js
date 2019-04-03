@@ -54,8 +54,6 @@ class App extends Component {
 			toggled: !this.state.toggled,
 			theme: this.themes[Number(!this.state.toggled)]
 		});
-		console.log("toggled = ", this.state.toggled);
-		console.log("theme = ", this.state.theme);
 	}
     render() {
         return (
