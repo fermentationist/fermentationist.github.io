@@ -1,0 +1,80 @@
+.grid-content {
+	grid-area: main;
+	grid-template-rows: repeat(3, minmax(100vh, 100vh));
+	grid-template-areas: 	"about"
+							"projects"
+							"contact";
+	}
+.section-about {
+	position: sticky;
+	top: 50vh;
+	grid-area: about;
+}
+.section-projects {
+	position: sticky;
+	top: 0;
+	grid-area: projects;
+	overflow-x: hidden;
+}
+.section-contact {
+	position: sticky;
+	top: 0;
+	grid-area: contact;
+}
+
+.grid-section {
+	grid-template-columns: 1fr 2fr;
+	top:0;
+	width: 100%;
+}
+
+.title-section {
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	position: sticky;
+	top: 0;
+	background-color: var(--section-title-background-color);
+	background-image: var(--section-title-background-image);
+	justify-content: flex-start;
+	align-items: center;
+	overflow-y: hidden;
+} 
+
+.section-title {
+	font-family: var(--section-title-font);
+	color: var(--section-title-color);
+	padding-top: 33px;
+	margin: 0;
+}
+
+.section-content {
+	width: 66vw;
+	height: 100%;
+	padding: 33px;
+	background-color: var(--section-background-color);
+	background-image: var(--section-background-image);
+	color: var(--section-content-color);
+	font-family: var(--section-content-font);
+	font-size: var(--section-content-font-size);
+	letter-spacing: var(--seciton-content-letter-spacing);
+	line-height: var(--section-content-line-height);
+	overflow-y: hidden;
+}
+.section-contact ul {
+	list-style: none;
+}
+
+.contact-email, .contact-links a {
+	color: var(--main-text-color);
+	transition: 0.7s;
+}
+
+.contact-email:hover, .contact-links a:hover {
+	color: var(--header-title-hover-color);
+	transition: 0.25s;
+}
+ 
+
+
