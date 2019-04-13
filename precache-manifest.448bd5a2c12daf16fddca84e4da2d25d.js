@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/static/media/graph-paper.01430b01.svg"
   },
   {
-    "revision": "eacd903de14c1d9778a9",
+    "revision": "aa06408f56109498022b",
     "url": "/static/css/main.ee46faf7.chunk.css"
   },
   {
@@ -28,8 +28,8 @@ self.__precacheManifest = [
     "url": "/static/media/seigaiha.00b22e9e.png"
   },
   {
-    "revision": "eacd903de14c1d9778a9",
-    "url": "/static/js/main.8d50ff85.chunk.js"
+    "revision": "aa06408f56109498022b",
+    "url": "/static/js/main.6086b716.chunk.js"
   },
   {
     "revision": "47f8a6f9be318a490f66e8cbf6b6c178",
@@ -56,7 +56,7 @@ self.__precacheManifest = [
     "url": "/static/media/pixel-dennis-long-eyebrow.ce115670.gif"
   },
   {
-    "revision": "38edef64ed328df1cf43bc3b4a3fe7fb",
+    "revision": "d87cde9f21d51f218a656c54c6355041",
     "url": "/index.html"
   }
 ];
