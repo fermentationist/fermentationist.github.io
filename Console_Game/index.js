@@ -1,0 +1,1 @@
+import{primaryFont as o,textColor as t,fontSize as e,pStyle as r}from"./prefs.js";import s from"./game.js";const f={};Object.setPrototypeOf(f,s);window.onload=(()=>{console.clear();f.intro()});export default f;

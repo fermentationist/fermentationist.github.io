@@ -1,0 +1,1 @@
+const n=function(t,e=false){const r=t.length;const o=e?"or":"and";if(r===1){return t[0]}if(r===2){return`${t[0]} ${o} ${t[1]}`}return`${t[0]}, ${n(t.slice(1),e)}`};export default n;
