@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "b72768c37512d453d678",
+    "revision": "7ae160422dd07a95de9f",
     "url": "/static/css/main.ee46faf7.chunk.css"
   },
   {
-    "revision": "b72768c37512d453d678",
-    "url": "/static/js/main.98a26711.chunk.js"
+    "revision": "7ae160422dd07a95de9f",
+    "url": "/static/js/main.70bc5f94.chunk.js"
   },
   {
     "revision": "42ac5946195a7306e2a5",
@@ -56,7 +56,7 @@ self.__precacheManifest = [
     "url": "/static/media/pixel-dennis-long-eyebrow.ce115670.gif"
   },
   {
-    "revision": "89575a738d00881ab19995a2a14a936f",
+    "revision": "74770dec22c57aea2803f46bc8788871",
     "url": "/index.html"
   }
 ];

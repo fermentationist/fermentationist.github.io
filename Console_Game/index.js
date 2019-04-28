@@ -1,1 +1,13 @@
-import{primaryFont as o,textColor as t,fontSize as e,pStyle as r}from"./prefs.js";import s from"./game.js";const f={};Object.setPrototypeOf(f,s);window.onload=(()=>{console.clear();f.intro()});export default f;
+import {primaryFont, textColor, fontSize, pStyle} from "./prefs.js";
+import ConsoleGame from "./game.js";
+
+// Create new game object and set its prototype to ConsoleGame.
+const game = {};
+Object.setPrototypeOf(game, ConsoleGame);
+// Wait for page to load, and display greeting.
+window.onload = () => {
+    console.clear();
+    game.intro();
+};
+window.game = ConsoleGame;
+export default game;
