@@ -95,7 +95,7 @@ const itemModule = game => {
 		_chain: {
 			name : "chain",
 			weight : 0,
-			description: "The chain dangling in front of you is exactly the sort often connected to a lightbulb. Perhaps you should \"pull\" it...",
+			description: "The thin ball chain dangling in front of you is exactly the sort often connected to a lightbulb. Perhaps you should \"pull\" it...",
 			takeable: false,
 			pull: function (){
 				game.state.objectMode = false;
@@ -126,7 +126,7 @@ const itemModule = game => {
 
 		_grue_repellant: {
 			name : "grue_repellant",
-			defective : 1,//Math.random() < 0.03,
+			defective : Math.random() < 0.03,
 			weight : 3,
 			article: "some",
 			description: "A 12oz can of premium aerosol grue repellant. This is the good stuff. Grues genuinely find it to be somewhat off-putting.",

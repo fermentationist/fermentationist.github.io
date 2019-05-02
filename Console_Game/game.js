@@ -6,7 +6,7 @@ import commandsList from "./commands.js";
 import customConsole from "./console_styles.js";
 
 // consoleGame.state object stores player position, inventory, number of turns, history of player actions, and some methods to update the object's values.
-//todo: rewrite with generators
+//todo: rewrite with generators?
 const ConsoleGame = {
 	maps: [...maps],
 	key: {...mapKeyModule(this)},
@@ -44,12 +44,13 @@ const ConsoleGame = {
 	set mapKey (value) {
 		this.key = value;
 	},
+	immuneCommands: ["help", "start", "commands", "inventory", "inventorytable", "look", "font", "color", "size", "save", "restore", "resume", "_save_slot"],
 	//===========================================\\
 	turnDemon: function (commandName, interpreterFunction) {
 	// This function runs at the start of each turn\\
-		const immuneCommands = ["help", "start", "commands", "inventory", "inventorytable", "look", "font", "color", "size", "save", "restore", "resume", "_save_slot"];
+		
 		try {
-			let dontCountTurn = immuneCommands.includes(commandName);
+			let dontCountTurn = this.immuneCommands.includes(commandName);
 			if (!dontCountTurn) {
 				this.addToHistory(commandName);
 				if (!this.state.objectMode) {
@@ -457,7 +458,13 @@ const ConsoleGame = {
 		if (unfinishedGame) {
 			this.replayHistory(unfinishedGame);
 			this.describeSurroundings();
+			return;
 		}
+		if (this.state.turn) {
+			this.describeSurroundings();
+			return;
+		}
+		this._start();
 	},
 
 	_help: function () {

@@ -9,5 +9,6 @@ window.onload = () => {
     console.clear();
     game.intro();
 };
+// for debugging - remove later
 window.game = ConsoleGame;
 export default game;
