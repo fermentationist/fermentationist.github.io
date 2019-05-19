@@ -10,6 +10,7 @@ import customConsole from "./console_styles.js";
 const ConsoleGame = {
 	maps: [...maps],
 	key: {...mapKeyModule(this)},
+	timeLimit: 10,
 	state: {
 		objectMode : false,
 		saveMode: false,
@@ -20,6 +21,7 @@ const ConsoleGame = {
 		history: [],
 		turn: null,
 		pendingAction: null,
+		gameOver: false,
 		startPosition: {
 			z: 3,
 			y: 13,
@@ -48,6 +50,10 @@ const ConsoleGame = {
 	//===========================================\\
 	turnDemon: function (commandName, interpreterFunction) {
 	// This function runs at the start of each turn\\
+		this.timers();
+		if (this.state.gameOver) {
+			return console.codeInline(["[Game over. Please type ", "start ", "to begin a new game.]"]);
+		}
 		try {
 			let dontCountTurn = this.immuneCommands.includes(commandName);
 			if (!dontCountTurn) {
@@ -59,6 +65,7 @@ const ConsoleGame = {
 			return interpreterFunction(commandName);
 		}
 		catch (err){
+			console.invalid(err)
 			return console.p(`That's not going to work. Please try something else.`);
 		}
 	},
@@ -102,6 +109,7 @@ const ConsoleGame = {
 		this.state.inventory = [];
 		this.state.history = [];
 		this.state.turn = 0;
+		this.state.gameOver = false;
 		this.state.pendingAction = null;
 		this.state.position = this.state.startPosition;
 		window.localStorage.removeItem("ConsoleGame.history");
@@ -176,6 +184,9 @@ const ConsoleGame = {
 	},
 
 	inEnvironment: function (itemName){
+		if (itemName === "all") {
+			return this.items._all;
+		}
 		const environment = this.mapKey[this.state.currentCell].env;
 		const envIndex = environment.map((item) => item.name).indexOf(itemName);
 		const objectFromEnvironment = (envIndex !== -1) && this.mapKey[`${this.state.currentCell}`].env[envIndex];
@@ -183,7 +194,9 @@ const ConsoleGame = {
 	},
 
 	itemsInEnvironment: function () {
-		return this.state.env.length && this.formatList(this.state.env.map((item) => `${item.article} ${item.name}`));
+		const listedItems = this.state.env.filter(item => item.listed);
+		return listedItems.length && this.formatList(this.state.env.filter(item => item.listed)
+			.map((item) => `${item.article} ${item.name}`));
 	},
 
 	displayItem: function (filename, type, width, height) {
@@ -200,13 +213,42 @@ const ConsoleGame = {
 		return contentDiv.append(objElement);
 	},
 
-	dead: function (text) {
-		console.p(text);
-		console.p("You have died. Of course, being dead, you are unaware of this unfortunate truth. In fact, you are no longer aware of anything at all.");
-		window.localStorage.removeItem("ConsoleGame.history");
-		setTimeout(() => location.reload(), 2000);
+	timers: function () {
+		//add any timer logic here
+		if (this.state.turn === 2) {
+			console.p("You hear a short metallic scraping punctuated by a dull \"thunk\". It sounds a lot like a deadbolt sliding into place.\n");
+
+			this.items._door.closed = true;
+			this.items._door.locked = true;
+			this.mapKey[this.items._door.lockedTarget].locked = true;
+			this.mapKey[this.items._door.closedTarget].closed = true;
+		}
+		if (this.state.turn >= this.timeLimit && ! this.state.gameOver) {
+			this.dead("You jump suddenly as the silence is shattered by a loud sustained alarm tone, not unlike the sound of the Emergency Alert System test you remember from the days of network television. It continues for another excruciating minute before it is mercifully ended by the  explosion that tears you and the house into a thousand fragments. ")
+		}
 	},
 
+	dead: function (text) {
+		console.p(text);
+		console.p("You have died. Of course, being dead, you are unaware of this unfortunate turn of events. In fact, you are no longer aware of anything at all.");
+		window.localStorage.removeItem("ConsoleGame.history");
+		this.state.gameOver = true;
+	},
+
+	captured: function () {
+		console.p("As you step out onto the front porch, you struggle to see in the bright midday sun, your eyes having adjusted to the dimly lit interior of the house. You hear a surprised voice say, \"Hey! How did you get out here?!\" You spin around to see the source of the voice, but something blunt and heavy has other plans for you and your still aching skull. You descend back into the darkness of sleep.");
+		this.state.position = this.state.startPosition;
+		this.state.turn += 3;
+		for (let i = 0; i < 3; i++) {
+			window.wait;
+		}
+		this.items._door.closed = true;
+		this.items._door.locked = true;
+		this.mapKey[this.items._door.lockedTarget].locked = true;
+		this.mapKey[this.items._door.closedTarget].closed = true;
+		console.p("Groggily, you lift yourself from the floor, your hands probing the fresh bump on the back of your head.");
+		// return;
+	},
 	_restore: function (command) {
 		let keys = Object.keys(localStorage);
 		let saves = keys.filter((key) => {
@@ -313,14 +355,14 @@ const ConsoleGame = {
 	// This function creates a global variable with the command name (and one for each related alias), and binds the function to be invoked to a getter method on the variable. This is what allows functions to be invoked by the player in the console without needing to type the invocation operator "()" after the name.
 	// Thank you to secretGeek for this clever solution. I found it here: https://github.com/secretGeek/console-adventure. You can play his console adventure here: https://rawgit.com/secretGeek/console-adventure/master/console.html
 	// It creates a new, one-word command in the interpreter. It takes in the function that will be invoked when the command is entered, and a comma-separated string of command aliases (synonyms). The primary command will be named after the first name in the string of aliases.
-	bindCommandToFunction: function (interpreterFunction, commandAliases, middleware=this.turnDemon){
+	bindCommandToFunction: function (interpreterFunction, commandAliases, daemon=this.turnDemon){
 	
 		const aliasArray = commandAliases.split(",");
 		const commandName = aliasArray[0];
 		// if (commandName in window){
 		// 	console.log(`${commandName} already defined.`);
 		// }
-		const interpretCommand = middleware ? middleware.bind(this, commandName, interpreterFunction): interpreterFunction.bind(this, commandName);
+		const interpretCommand = daemon ? daemon.bind(this, commandName, interpreterFunction): interpreterFunction.bind(this, commandName);
 		// const interpretCmd = interpreterFunction.bind(null, interpreterDemon);
 		// const interpretWithDemon = interpretCmd.bind(null, turnDemon);
 		try {
@@ -368,10 +410,11 @@ const ConsoleGame = {
 	unfinishedGame: function () {
 		return window.localStorage.getItem("ConsoleGame.history");
 	},
-
 	intro: function (){
 		// Greeting to be displayed at the beginning of the game
-		const intro_1 = "\nWelcome!\nAs a fan of old Infocom interactive fiction games, I thought it would be fun to hide a text adventure in the browser's JavaScript console. This demonstration of the concept is as yet incomplete, but you may try it out by typing in the console below.\n";
+		const intro_1 = "\nWelcome!\nAs a fan of old Infocom™ interactive fiction games, I thought it would be fun to hide a text adventure in the browser's JavaScript console. This work in progress is my attempt. Try it out by typing in the console below. Have fun!\n";
+		console.title("\nconsoleGame\n");
+		console.custom("by Dennis Hodges\ncopyright 2019", "font-size:100%;color:lightgray;padding:0 1em;");
 		console.intro(intro_1);
 		console.codeInline(this.introOptions());
 	},
@@ -410,7 +453,9 @@ const ConsoleGame = {
 		}
 		return options;
 	}, 
-
+	preface: function () {
+		console.p("You slowly open your eyes. Your eyelids aren't halfway open before the throbbing pain in your head asserts itself. You feel hungover, but you can't seem to remember what you were doing last night, or how you came to be in this unfamiliar place. You appear to be in the entrance hall of a dusty old house, neglected and in disrepair.")
+	},
 	stockDungeon: function (subEnvName){
 		Object.keys(this.mapKey).map((key) => {
 			let roomEnv = this.mapKey[key][subEnvName];
@@ -437,9 +482,10 @@ const ConsoleGame = {
 	},
 
 	_start: function () {
-		if (this.state.turn < 1){
+		if (this.state.turn < 1 || this.state.gameOver){
 			this.initializeNewGame();
 		}
+		this.preface();
 		return this.describeSurroundings();
 	},
 
@@ -460,15 +506,16 @@ const ConsoleGame = {
 
 	_help: function () {
 		// Greeting to be displayed at the beginning of the game
-		const baseStyle = `font-family:${primaryFont};color:thistle;font-size:110%;line-spacing:1.5;`;
-		const codeStyle = "color:#29E616;font-size:125%;";
+		const baseStyle = `font-family:${primaryFont};color:pink;font-size:105%;line-height:1.5;`;
+		const italicCodeStyle = "font-family:courier;color:#29E616;font-size:115%;font-style:italic;line-height:2;";
+		const codeStyle = "font-family:courier;color:#29E616;font-size:115%;line-height:1.5;";/*
 		const text_0 = ["Due to the limitations of the browser console as a medium, the commands you may enter can only be one-word long, with no spaces. "];
 		console.codeInline(text_0, baseStyle, null);
 		const text_1 = [
 			"However, two-word commands may be constructed on two separate lines. For example, if you wanted to examine the glove, you would first type ",
 			"examine ",
 			"to which the game would respond ",
-			"What is it you would like to examine? ",
+			"What would you like to examine? ",
 			"Then you would type the object of your intended action, ",
 			"glove",
 			", to complete the command."
@@ -478,7 +525,19 @@ const ConsoleGame = {
 			"Alternately, you may enter both words on the same line, provided they are separated with a semicolon and no spaces, i.e ",
 			"examine;glove"
 		]
+		console.codeInline(text_2, baseStyle, codeStyle);*/
+	
+		const text = ["Valid commands are one word long, with no spaces. Compound commands consist of at most two commands, separated by a carriage return or a semicolon. For example:\n", "get\n", "What would you like to take?\n", "lamp\n", "You pick up the lamp.\n","or,\n", "get;lamp\n", "What would you like to take?\nYou pick up the lamp."];
+		const styles = [baseStyle, codeStyle, italicCodeStyle, codeStyle, italicCodeStyle, baseStyle, codeStyle, italicCodeStyle];
+		console.inline(text, styles);
+
+		const text_2 = ["Typing ", "inventory ", "or ", "i ", "will display a list of any items the player is carrying. \nTyping ", "look ", "or ", "l ", "will give you a description of your current environs in the game. \nCommands with prepositions are not presently supported, and ", "look ", "can only be used to \"look around\", and not to \"look at\" something. Please instead use ", "examine ", "or its shortcut ", "x ", "to investigate an item's properties. \nThe player may move in the cardinal directions– ", "north", ", ", "south", ", ", "east", " and ", "west ", "as well as ", "up ", "and ", "down. ", "Simply type the direction you want to move. These may be abbreviated as ", "n", ", ", "s", ", ", "e", ", ", "w", ", ", "u ", "and ", "d ", ", respectively."];
+		
 		console.codeInline(text_2, baseStyle, codeStyle);
+
+		const text_3 = ["You may save your game progress (it will be saved to localStorage) by typing ", "save", ". You will then be asked to select a save slot, ", "_0 ", "through ", "_9 ", "(remember, user input can't begin with a number). Typing ", "help ", "will display the in-game help text."];
+	
+		console.codeInline(text_3, baseStyle, codeStyle);
 		console.codeInline(this.introOptions(this.state.turn));
 	},
 

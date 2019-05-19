@@ -49,14 +49,15 @@ const Commands = game => {
 				break;
 		}
 		const newCell = maps[newPosition.z][newPosition.y][newPosition.x];
-		// Exit function if movement in given direction is not possible
+		// Exit function if movement in given direction is not possible due to map boundary
 		if (newCell === "*"){
 			console.p("You can't go that direction");
 			return;
 		}
-		if (mapKey[newCell].locked || mapKey[newCell].closed){
+		// Display message and exit function if path to next space is blocked by a locked or closed door or analagous item
+		if (game.mapKey[newCell].locked || game.mapKey[newCell].closed){
 			console.p("The way is blocked.");
-			console.p(mapKey[newCell].lockText ? mapKey[newCell].lockText : "");
+			console.p(game.mapKey[newCell].lockText && (game.mapKey[newCell].locked || game.mapKey[newCell].closed) ? game.mapKey[newCell].lockText : "");
 			return;
 		}
 		// If movement in direction is possible, update player position
@@ -66,6 +67,7 @@ const Commands = game => {
 			y: newPosition.y,
 			z: newPosition.z,
 		}
+		// End by describing new environment after move
 		return game.describeSurroundings();
 	}
 
@@ -78,7 +80,7 @@ const Commands = game => {
 	const _act_upon = (command) => {
 		game.state.objectMode = true;
 		game.state.pendingAction = command;
-		console.p(`What is it you would like to ${command}?`);
+		console.p(`What would you like to ${command}?`);
 	}
 
 	// todo: move to game.js
@@ -87,16 +89,6 @@ const Commands = game => {
 		game.state.pendingAction = whichPref;
 		console.codeInline([`To set the value of ${whichPref}, you must type an underscore `, `_`, `, followed by the value enclosed in backticks `,`\``,`.`]);
 		console.codeInline([`For example: `, `_\`value\``]);
-		
-
-		// const italic = `font-size:120%;color:#32cd32;font-style:italic;font-family:${primaryFont}`;
-		// const bold = `font-size:120%;color:#32cd32;font-style:bold;font-family:${primaryFont}`;
-		// const example = `font-size:120%;color:#7BF65E;font-weight:bold;font-family:${primaryFont}`;
-		// const exampleItalic = `font-size:120%;color:#7BF65E;font-style:italic;font-weight:bold;font-family:${primaryFont}`;
-		// console.p(`Enter value for ${whichPref}.`);
-		// console.inline([`Value must be entered`,` within parentheses`, `(and quotes, if the value is a string), and immediately preceded by an underscore.`],[pStyle, italic, pStyle]);
-		// console.inline([`Value must be entered`,` within parentheses`, `(and quotes, if the value is a string), and immediately preceded by an underscore.`],[pStyle, italic, pStyle]);
-		// console.inline([`Like this:  `, `_(`, `"value"`, `)`], [bold, example, exampleItalic, example]);
 	}
 
 	const _wait = () => {
@@ -144,7 +136,7 @@ const Commands = game => {
 	const _items = (itemName) => {
 		// Exit function with error message if previous command does not require an object
 		if (!game.state.objectMode){
-			return console.p("Invalid command");
+			return console.invalid("Invalid command");
 		}
 		// Exit function with error message if item is not available in player inventory or current location.
 		const item = game.inEnvironment(itemName) || game.inInventory(itemName);
@@ -223,6 +215,9 @@ const Commands = game => {
 		[_act_upon, aliasString("contemplate", thesaurus)],
 		[_act_upon, aliasString("unlock", thesaurus)],
 		[_act_upon, aliasString("open", thesaurus)],
+		[_act_upon, aliasString("close", thesaurus)],
+		[_act_upon, aliasString("lock", thesaurus)],
+		[_act_upon, aliasString("turn", thesaurus)],
 		[_act_upon, cases("hide")],
 
 		// // Objects

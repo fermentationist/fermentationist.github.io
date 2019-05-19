@@ -14,12 +14,13 @@ const itemModule = game => {
 		closed: false,
 		locked: false, 
 		article: "a",
+		listed: true,
 		take: function (){
 			game.state.objectMode = false;
 			if(this.takeable && game.inEnvironment(this.name)){
 				game.addToInventory([this]);
 				game.mapKey[game.state.currentCell].removeFromEnv(this);
-				return console.p(`You pick up the ${this.name}`);
+				return console.p(`You pick up the ${this.name}.`);
 			} else {
 				return console.p("You can't take that.");
 			}
@@ -41,7 +42,7 @@ const itemModule = game => {
 		},
 		open: function () {
 			game.state.objectMode = false;
-			if (!game.inEnvironment) {
+			if (!game.inEnvironment(this.name)) {
 				console.p(`You don't see ${this.article} ${this.name} here.`);
 				return;
 			}
@@ -62,6 +63,25 @@ const itemModule = game => {
 			return;
 		},
 
+		close: function () {
+			game.state.objectMode = false;
+			if (!game.inEnvironment(this.name)) {
+				console.p(`You don't see ${this.article} ${this.name} here.`);
+				return;
+			}
+			if (!this.openable) {
+				console.p("It cannot be closed.");
+				return;
+			}
+			if (this.closed) {
+				console.p("It is already closed.");
+				return;
+			}
+			console.p(`The ${this.name} is now closed.`);
+			this.closed = true;
+			return;
+		},
+
 		read: function (){
 			game.state.objectMode = false;
 			if (!this.text){
@@ -73,11 +93,11 @@ const itemModule = game => {
 			console.p(`The text on the ${this.name} reads: \n`);
 			return console.note(this.text);
 		},
-
-		hide: function (){
-			return game.displayItem();
+		turn: function () {
+			game.state.objectMode = false;
+			console.p(`Turning the ${this.name} has no noticeable effect.`);
+			return;
 		},
-
 		unlock: function () {
 			game.state.objectMode = false;
 			if (!this.locked){
@@ -102,8 +122,13 @@ const itemModule = game => {
 	const items = {
 		_all: {
 			name: "all",
-			_take_all: function () {
+			listed: false,
+			takeable: false,
+			take: function () {
 				const all = game.state.env;
+				all.map(item => {
+					return item.takeable ? item.take() : null;
+				});
 				// game.state.objectMode = false;
 				// if (this.takeable && game.inEnvironment(this.name)) {
 				// 	game.addToInventory([this]);
@@ -119,7 +144,7 @@ const itemModule = game => {
 			name: "book",
 			weight: 2,
 			article: "a",
-			description: "This dusty, leatherbound tome"
+			description: "A dusty, leatherbound tome"
 		},
 
 		_catalogue: {
@@ -127,25 +152,57 @@ const itemModule = game => {
 			article: "a",
 			description: "This booklet appears to be the exhibition catalogue for some fancy art show. ",
 			read: function (){
+				game.state.objectMode = false;
 				console.info(`[click link to read => "https://drive.google.com/file/d/0B89dfqio_IykVk9ZMV96TUJESnM/view?usp=sharing"]`)
 				// window.open("https://drive.google.com/file/d/0B89dfqio_IykVk9ZMV96TUJESnM/view?usp=sharing", "_blank");//game.displayItem("assets/2008_Ministry_of_Culture.pdf", "application/pdf", "1440px", "960px");
 			}
 		},
-
+		_chair: {
+			name: "chair",
+			takeable: false,
+		},
+		_desk: {
+			name: "desk",
+			takeable: false,
+		},
+		
+		_books: {
+			name: "books",
+			takeable: false,
+		},
+		_paintings: {
+			name: "paintings",
+			takeable: false,
+		},
 		_door: {
 			name: "door",
 			article: "a",
 			openable: true,
-			locked: true,
+			locked: false,
 			closed: true,
 			takeable: false,
+			listed: false,
 			unlockedBy: "key",
-			reveals: "A",
-			description: "It is a massive wooden door, darkened with generations of dirt and varnish. It is secured with a steel deadbolt.",
+			lockedTarget: "A",
+			closedTarget: "A",
+			get description () {
+				game.state.objectMode = false;
+				return `The massive wooden door, darkened with generations of dirt and varnish, is secured with a steel deadbolt, which is ${this.locked ? "locked." : "unlocked!"}`
+			},
 			unlock (){
 				Object.getPrototypeOf(this).unlock.call(this);
-				game.mapKey[this.reveals].locked = false;
-				console.log("TCL: unlock -> game.mapKey[this.reveals]", game.mapKey[this.reveals])
+				game.mapKey[this.lockedTarget].locked = false;
+				return;
+			},
+			open () {
+				Object.getPrototypeOf(this).open.call(this);
+				game.mapKey[this.closedTarget].closed = false;
+				return;
+			},
+			close () {
+				Object.getPrototypeOf(this).close.call(this);
+				game.mapKey[this.closedTarget].closed = true;
+				return;
 			}
 			
 		},
@@ -155,10 +212,16 @@ const itemModule = game => {
 			// weight: 0,
 			// takeable: false,
 			openable: false,
+			listed: false,
 			// locked: true,
 			// unlockedBy: "key",
 			description: "The brushed steel surface of the lock is virtually unscratched, its brightness in stark contrast to the dark and grimy wood of the heavy front door. It seems certain that this deadbolt was installed very recently. It is a very sturdy-looking lock and without the key that fits its currently vacant keyhole, you will not be able to open it.",
-			proto: "_door"
+			unlock (){
+				Object.getPrototypeOf(Object.getPrototypeOf(this)).unlock.call(this);
+				game.mapKey[this.lockedTarget].locked = false;
+			},
+			proto: "_door",
+
 		},
 
 		_chain: {
@@ -226,18 +289,56 @@ const itemModule = game => {
 			description: "It is an old-timey key that appears to be made of tarnished brass"
 		},
 
+		_matchbook: {
+			name: "matchbook",
+			get description () { 
+				return `It is an old paper matchbook, of the type that used to be given away with packs of cigarettes, or printed with the name and telephone number of a business and used as marketing schwag. This particular specimen is a faded green and says \"Magnum Opus\" in a peculiar, squirming op-art font. ${this.closed ? "It is closed, its cardboard cover tucked in." : "The cardboard cover is open, and you can see a handwritten message on the inside. It says, \"THE OWLS ARE NOT WHAT THEY SEEM.\"" }`;
+			},
+			openable: true,
+			closed: true,
+		},
+
 		_note: {
 			name : "note",
+			text: `Welcome! Congratulations! You have been chosen to participate in an exclusive private research study. Should you be able to escape the testing environment before the test termination protocol commences, please take a moment to fill out the supplied survey card. And remember to have fun!`,
+			description: "It is a typewritten note on folded stationery. You found it lying next to you on the floor when you regained consciousness."
+		},
+
+		_card: {
+			name: "card",
+			text: `Survey Card \n\nFor each of the following questions, please circle 1 for 'strongly disagree', 2 for 'somewhat disagree', 3 for 'no opinion', 4 for 'somewhat agree' and 5 for 'strongly agree'. \n1. `,
+			description: "It is a four by six inch card cut from off-white cardstock, with a survey printed on one side ",
+			turn: function () {
+				game.state.objectMode = false;
+				console.p("Upon turning over the survey card, you notice that an unfamiliar symbol, printed in red ink.");
+				return;
+			}
+		},
+		_survey: {
+			name: "survey",
+			proto: "_card",
+			listed: false,
+			takeable: false,
+		},
+		_symbol: {
+			name: "symbol",
+			listed: false,
+			takeable: false,
+			description: "The symbol on the card's reverse is printed in red ink, and is shaped like (??)",
+		},
+
+		_filthy_note: {
+			name: "filthy note",
 			text: `Dear John,\nI'm leaving. After all of this time, I said it. But I want you to understand that it is not because of you, or something you've done (you have been a loving and loyal partner). It is I who have changed. I am leaving because I am not the person who married you so many years ago; that, and the incredibly low, low prices at Apple Cabin. Click here ==> http://liartownusa.tumblr.com/post/44189893625/apple-cabin-foods-no-2 to see why I prefer their produce for its quality and respectability.`,
 			description: "A filthy note you found on the floor of a restroom. Congratulations, it is still slightly damp. Despite its disquieting moistness, the text is still legible."
 		},
-
 		_no_tea: {
 			name: "no_tea",
 			weight: 0,
 			article: "",
 			description: "You do not have any tea.",
 			methodCallcount: 0,
+			takeable: false,
 			no_teaMethod: function (message){
 					this.methodCallcount ++;
 					game.state.objectMode = false;
@@ -269,7 +370,6 @@ const itemModule = game => {
 				}
 				return this.no_teaMethod("Let's not resort to that just yet!");
 			},
-			takeable: false
 		}
 	}
 	

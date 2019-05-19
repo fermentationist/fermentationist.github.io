@@ -37,25 +37,40 @@ const mapKey = game => {
 		},
 		"A": {
 			name: "Freedom!",
-			locked: true,
-			lockText: "The formidable wooden front door will not open. It looks as old as the rest of the building, and like the wood panelled walls of the entrance hall, it is dark with countless murky layers of varnish. This makes it very easy to see exactly why the door won't open– a shiny, apparently new stainless steel deadbolt. The keyhole is empty."
+			locked: false,
+			closed: true,
+			get lockText () {
+				return `The formidable wooden front door will not open. It looks as old as the rest of the building, and like the wood panelled walls of the entrance hall, it is dark with countless layers of murky varnish. It is ${this.locked ? "locked" : "unlocked"}.`;
+				
+			},
+			get description () {
+				if (game.state.turn < 3) {
+					game.captured();
+					return "";
+				}
+				return "You have escaped! "
+			},
 		},
 		"^": {
 			name: "Second floor hallway",
 			description: "You are at the top of a wide wooden staircase, on the second floor of the old house.",
 			visibleEnv: []
 		},
-
+		"+": {
+			name: "Study",
+			description: "The walls of the dark, wood-panelled study are lined with bookshelves, from which waft the pleasantly musty smell of old books emanates from the bookshelves that line the wall. Other than a few paintings on the wall, the only other furnishings are an imposing walnut desk, and a leather upholstered desk chair.",
+			visibleEnv: ["desk", "paintings", "chair", "books"]
+		},
 		"#": {
 			name: "Staircase landing",
 			description: "You are on the landing of a worn oak staircase connecting the first and second floors of the old abandoned house.",
-			visibleEnv: ["key", "note", "catalogue"]
+			visibleEnv: ["key", "filthy_note", "catalogue"]
 		},
 
 		"%": {
 			name: "Entrance hall",
 			description: "You are in the main entrance hall of a seemingly abandoned house. There are three doors on either side of the hall, several of which have been boarded up. Facing you at the rear of the hall is a wide oak staircase that connects the first and second floors of the old house.",
-			visibleEnv: ["door", "lock"]
+			visibleEnv: ["door", "note", "card", "survey", "symbol"]
 		},
 
 		"@": {
