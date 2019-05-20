@@ -48,7 +48,7 @@ self.__precacheManifest = [
     "url": "/static/media/pixel-dennis-long-eyebrow.ce115670.gif"
   },
   {
-    "revision": "fa6bc9dea1276cd10f9ecd99e9d1caea",
+    "revision": "3edb10c5831b3143b86f16341017a6b8",
     "url": "/index.html"
   }
 ];
