@@ -1,5 +1,4 @@
 import consoleGame from "./game.js";
-import { pStyle } from "./prefs.js";
 // ===========//ItemModule//===========
 const itemModule = game => {
 	const Item = {
@@ -306,7 +305,7 @@ const itemModule = game => {
 
 		_card: {
 			name: "card",
-			text: `Survey Card \n\nFor each of the following questions, please circle 1 for 'strongly disagree', 2 for 'somewhat disagree', 3 for 'no opinion', 4 for 'somewhat agree' and 5 for 'strongly agree'. \n1. `,
+			text: `Survey Card \nFor each of the following questions, please circle 1 for 'strongly disagree', 2 for 'somewhat disagree', 3 for 'no opinion', 4 for 'somewhat agree' and 5 for 'strongly agree'. \n1. `,
 			description: "It is a four by six inch card cut from off-white cardstock, with a survey printed on one side ",
 			turn: function () {
 				game.state.objectMode = false;
@@ -343,9 +342,8 @@ const itemModule = game => {
 					this.methodCallcount ++;
 					game.state.objectMode = false;
 					console.p(message);
-					// return console.p(`${message} ${this.methodCallcount > 1 ? "Perhaps you should contemplate that for a moment..." : ""}`);
-					if (this.methodCallcount > 1){
-						console.inline(["Perhaps you should take a moment to ", "contemplate", " that."], [pStyle, pStyle + "font-style:italic;", pStyle])	
+					if (this.methodCallcount > 1 && game.state.pendingAction !== "contemplate"){
+						console.p("Perhaps you should take a moment to contemplate that.");	
 					}
 			},
 			drink: function (){
@@ -364,9 +362,9 @@ const itemModule = game => {
 				return this.no_teaMethod("Unsurprisingly, using the no tea has no effect.");
 			},
 			contemplate: function (){
-				if (this.methodCallcount > 1){
+				if (this.methodCallcount > 2){
 					console.p("Having thoroughly contemplated the existential ramifications of no tea, you suddenly find that your being transcends all time and space. You are the spoon, so to speak.");
-					return console.h1("You just won, you winner, you!");
+					return game.winner();
 				}
 				return this.no_teaMethod("Let's not resort to that just yet!");
 			},

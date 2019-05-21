@@ -6,6 +6,8 @@ const mapKey = game => {
 		unlockText: "",
 		hideSecrets: false,
 		description: "You find yourself in a non-descript, unremarkable, non-place. Nothing of interest is likely to ever happen here.",
+		smell: "Your nose is unable to detect anything unusual, beyond the smell of mildew and rot that permeates the entirety of the decrepit building.",
+		sound: "The silence is broken only by the faint sound of the wind outside, and the occasional creaking of sagging floorboards underfoot.",
 		hiddenEnv: [],
 		visibleEnv: [],
 		get env (){
@@ -48,7 +50,7 @@ const mapKey = game => {
 					game.captured();
 					return "";
 				}
-				return "You have escaped! "
+				return game.winner("\nYou have escaped!\n");
 			},
 		},
 		"^": {
@@ -58,7 +60,8 @@ const mapKey = game => {
 		},
 		"+": {
 			name: "Study",
-			description: "The walls of the dark, wood-panelled study are lined with bookshelves, from which waft the pleasantly musty smell of old books emanates from the bookshelves that line the wall. Other than a few paintings on the wall, the only other furnishings are an imposing walnut desk, and a leather upholstered desk chair.",
+			description: "The walls of the dark, wood-panelled study are lined with bookshelves, containing countless dusty tomes. Other than a few paintings on the wall, the only other furnishings are an imposing walnut desk, and a leather upholstered desk chair.",
+			smell: "The pleasantly musty smell of old books emanates from the bookshelves that line the wall.",
 			visibleEnv: ["desk", "paintings", "chair", "books"]
 		},
 		"#": {
@@ -69,7 +72,7 @@ const mapKey = game => {
 
 		"%": {
 			name: "Entrance hall",
-			description: "You are in the main entrance hall of a seemingly abandoned house. There are three doors on either side of the hall, several of which have been boarded up. Facing you at the rear of the hall is a wide oak staircase that connects the first and second floors of the old house.",
+			description: "You are in the main entrance hall of a seemingly abandoned house. There are three doors on either side of the hall, several of which have been boarded up. The front door is to the south. At the rear of the hall is a wide oak staircase that connects the first and second floors of the old house.",
 			visibleEnv: ["door", "note", "card", "survey", "symbol"]
 		},
 
