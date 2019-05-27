@@ -1,4 +1,5 @@
 import consoleGame from "./game.js";
+import {randomDogName} from "./dogNames.js";
 // ===========//ItemModule//===========
 const itemModule = game => {
 	const Item = {
@@ -11,7 +12,7 @@ const itemModule = game => {
 		takeable: true,
 		openable: false,
 		closed: false,
-		locked: false, 
+		locked: false,
 		article: "a",
 		listed: true,
 		take: function (){
@@ -155,8 +156,8 @@ const itemModule = game => {
 		// 	description: "A dusty, leatherbound tome"
 		// },
 
-		_catalogue: {
-			name: "catalogue",
+		_booklet: {
+			name: "booklet",
 			article: "a",
 			description: "This booklet appears to be the exhibition catalogue for some fancy art show. ",
 			read: function (){
@@ -183,6 +184,35 @@ const itemModule = game => {
 			takeable: false,
 			article: "some"
 		},
+
+		_safe: {
+			name : "safe",
+			closed: true,
+			locked: true,
+			description: "The wall safe looks rugged and well-anchored. You doubt that it could be breached by brute force, and it appears to have already successfully weathered a few such attempts. On its face, a complete alphanumeric keypad resides beneath what looks like a small digital readout.",
+			contents:["key"],
+			open: function () {
+				this.unlock.call(this);
+			},
+			unlock: function (){
+				game.state.solveMode = true;
+				game.state.objectMode = false;
+				console.digi("ENTER PASSCODE:")
+			},
+			use: function (){
+				this.unlock.call(this);
+			},
+			// examine: function (){
+			// 	game.state.objectMode = false;
+			// 	if (this.contents.length){
+			// 		const hiddenItem = this.contents.pop();
+			// 		console.p(`${this.description}\nAs you examine the glove, a ${hiddenItem.name} falls out, onto the floor.`);
+			// 		return game.mapKey[game.state.currentCell].addToEnv(hiddenItem.name);
+			// 	} 
+			// 	return this.description;
+			// }
+		},
+
 		_painting: {
 			name: "painting",
 			takeable: true,
@@ -195,7 +225,7 @@ const itemModule = game => {
 			},
 			revealText (text) {
 				if (! this.previouslyRevealed) {
-					console.p(text + "a small recess is revealed. Within the shallow niche is a scuffed and battered steel lockbox.");
+					console.p(text + "a small recess is revealed. Within the shallow niche is a small black wall safe, covered with countless shallow dents, scratches and abrasions.");
 					game.mapKey[this.location].hideSecrets = false;
 					this.previouslyRevealed = true;
 				}
@@ -339,13 +369,25 @@ const itemModule = game => {
 
 		_note: {
 			name : "note",
-			text: `Welcome! Congratulations! You have been chosen to participate in an exclusive private research study. Should you be able to escape the testing environment before the test termination protocol commences, please take a moment to fill out a survey card. And remember to have fun!`,
-			description: "It is a typewritten note on folded stationery. You found it lying next to you on the floor when you regained consciousness."
+			text: `We have your doggo.`,
+			firstRead: true,
+			description: "The note is composed of eclectically sourced, cut-out letters, in the style of a movie ransom note. You found it lying next to you on the floor when you regained consciousness.",
+			read: function () {
+				game.state.objectMode = false;
+				console.ransom(this.text);
+				if (this.firstRead) {
+					const dogName = randomDogName()
+					game.state.dogName = dogName;
+					console.p(`Your dog, ${dogName}, is your best buddy! Who would do such a thing!?`);
+					this.firstRead = false;
+				}
+				
+			}
 		},
 
 		_card: {
 			name: "card",
-			text: `Survey Card \nFor each of the following questions, please circle '1' for 'strongly disagree', '2' for 'somewhat disagree', '3' for 'no opinion', '4' for 'somewhat agree' and '5' for 'strongly agree'. \n1. This is the first involuntary study I have participated in.\n2. I found the study conditions to be inadequately challenging.\n3. I would be willing to participate in additional studies.\n4. I am aware that any attempt to contact law enforcement will have adverse consequences for myself or my family, whose location of residence is known to the Director.\n`,
+			text: `Survey Card \nFor each of the following questions, please circle '1' for 'strongly disagree', '2' for 'somewhat disagree', '3' for 'no opinion', '4' for 'somewhat agree' and '5' for 'strongly agree'. \n1. This is the first involuntary study I have participated in.\n2. I found the study conditions to be inadequately challenging.\n3. I would be willing to participate in additional studies.\n4. I am aware that any attempt to contact law enforcement will have adverse consequences for myself or my family, whose location of residence is known.\n`,
 			description: "It is a four by six inch card cut from off-white cardstock, on which a survey is printed.",
 			turn: function () {
 				game.state.objectMode = false;

@@ -1,4 +1,6 @@
 import { primaryFont, textColor, fontSize } from "./prefs.js";
+import fonts from "./webFonts.js";
+import ransom from "./consoleRansom.js";
 
 const customConsole = (() => {
 	const customLog = function (message, style, logType = "log") {
@@ -38,7 +40,7 @@ const customConsole = (() => {
 		customLog(message, `font-size:calc(1.2 * ${fontSize});color:cyan;font-family:${primaryFont};padding:0 1em;`);
 	}
 	console.title = message => {
-		customLog(message, `font-size:calc(2.5 * ${fontSize});font-weight:bold;color:gold;text-shadow:orange 2px 2px 5px;goldenrod -2px -2px 5px;font-family:Courier;padding:0 1em;margin:0 auto 0 35%;`);
+		customLog(message, `font-size:calc(2.5 * ${fontSize});font-weight:bold;color:gold;text-shadow:orange 2px 2px 5px;goldenrod -2px -2px 5px;font-family:Courier;padding:0 1em;margin:0 auto 0 35%;border: 2px dashed goldenrod;`);
 	}
 	console.win = message => {
 		customLog(message, `font-size:calc(2.5 * ${fontSize});font-weight:bold;color:gold;text-shadow:orange 2px 2px 5px;goldenrod -2px -2px 5px;font-family:Courier;padding:0 1em;animation:flashing 0.8s infinite;`);
@@ -60,6 +62,13 @@ const customConsole = (() => {
 			return index % 2 !== 0 ? codeStyle : baseStyle;
 		})
 		console.inline(stringSegmentArray, styleArray);
+	}
+	console.digi = message => {
+		const spacedText = message.split("").join(" ").split("");
+		const styles = spacedText.map(char => {
+			return `font-family:'courier new';color:rgb(${255 + Math.floor(Math.random() * 10)}, ${68 + Math.floor(Math.random() * 10)}, ${0 + Math.floor(Math.random() * 10)});font-size:${2 + (Math.random() / 2)}em;`
+		});
+		console.inline(spacedText, styles);
 	}
 })();
 

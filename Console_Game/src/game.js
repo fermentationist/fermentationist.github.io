@@ -4,6 +4,7 @@ import mapKeyModule from "./mapkey.js";
 import itemModule from "./items.js";
 import commandsList from "./commands.js";
 import customConsole from "./console_styles.js";
+import spells from "./spells.js";
 
 // consoleGame.state object stores player position, inventory, number of turns, history of player actions, and some methods to update the object's values.
 //todo: rewrite with generators?
@@ -18,6 +19,7 @@ const ConsoleGame = {
 		restoreMode: false,
 		prefMode: false,
 		confirmMode: false,
+		solveMode: false,
 		inventory: [],
 		history: [],
 		turn: null,
@@ -108,6 +110,7 @@ const ConsoleGame = {
 		this.state.restoreMode = false;
 		this.state.prefMode = false;
 		this.state.confirmMode = false;
+		this.state.solveMode = false;
 		this.state.inventory = [];
 		this.state.history = [];
 		this.state.turn = 0;
@@ -217,7 +220,7 @@ const ConsoleGame = {
 
 	timers: function () {
 		//add any timer logic here
-		if (this.state.turn === 2) {
+		if (this.state.turn === 2 && ! this.items._door.locked) {
 			console.p("You hear a short metallic scraping punctuated by a dull \"thunk\". It sounds a lot like a deadbolt sliding into place.\n");
 
 			this.items._door.closed = true;
@@ -226,7 +229,7 @@ const ConsoleGame = {
 			this.mapKey[this.items._door.closedTarget].closed = true;
 		}
 		if (this.state.turn >= this.timeLimit && ! this.state.gameOver) {
-			this.dead("You jump suddenly as the silence is shattered by a loud sustained alarm tone, not unlike the sound of the Emergency Alert System test you remember from the days of network television. It continues for another excruciating minute before it is mercifully ended by the  explosion that tears you and the house into a thousand fragments. ")
+			this.dead("You don't feel so well. ")
 		}
 	},
 
@@ -422,10 +425,12 @@ const ConsoleGame = {
 	intro: function (){
 		// Greeting to be displayed at the beginning of the game
 		const intro_1 = "\nWelcome!\nAs a fan of old Infocom™ interactive fiction games, I thought it would be fun to hide a text adventure in the browser's JavaScript console. This work in progress is my attempt. Try it out by typing in the console below. Have fun!\n";
-		console.title("\nconsoleGame\n");
+		console.title("consoleGame");
 		console.custom("by Dennis Hodges\ncopyright 2019", "font-size:100%;color:lightgray;padding:0 1em;");
 		console.intro(intro_1);
 		console.codeInline(this.introOptions());
+		// console.ransom(`we have your doggo.`)
+		// console.note(spells)
 	},
 
 	introOptions: function (){
@@ -463,7 +468,7 @@ const ConsoleGame = {
 		return options;
 	}, 
 	preface: function () {
-		console.p("You slowly open your eyes. Your eyelids aren't halfway open before the throbbing pain in your head asserts itself. You feel hungover, but you can't seem to remember what you were doing last night, or how you came to be in this unfamiliar place. You appear to be in the entrance hall of a dusty old house, neglected and in disrepair.")
+		console.p("You slowly open your eyes. Your eyelids aren't halfway open before the throbbing pain in your head asserts itself. The last thing you can remember is taking your dog for a walk after work, but you ceratinly don't remember being here before.");
 	},
 	stockDungeon: function (subEnvName){
 		Object.keys(this.mapKey).map((key) => {
