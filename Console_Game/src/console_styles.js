@@ -70,6 +70,7 @@ const customConsole = (() => {
 		});
 		console.inline(spacedText, styles);
 	}
+	console.map = floorMap => console.table(floorMap.map(row => row.join("")))
 })();
 
 export default customConsole;

@@ -51,7 +51,7 @@ const itemModule = game => {
 		},
 		open: function () {
 			game.state.objectMode = false;
-			if (!game.inEnvironment(this.name)) {
+			if (!game.inEnvironment(this.name) && !game.inInventory(this.name)) {
 				console.p(`You don't see ${this.article} ${this.name} here.`);
 				return;
 			}
@@ -125,6 +125,15 @@ const itemModule = game => {
 		use: function (){
 			game.state.objectMode = false;
 			return console.p(`Try as you might, you cannot manage to use the ${this.name}`);
+		},
+		burn: function (){
+			game.state.objectMode = false;
+			if (! game.inInventory(items._matchbook)) {
+				console.p("You don't the means to light a fire.");
+				return;
+			}
+			console.p(`The meager flame is insufficient to ignite the ${this.name}.`);
+			return;
 		}
 	}
 
@@ -162,6 +171,9 @@ const itemModule = game => {
 			description: "This booklet appears to be the exhibition catalogue for some fancy art show. ",
 			read: function (){
 				game.state.objectMode = false;
+				if (!game.inInventory(this.name)) {
+					return console.p(`You will need to pick up the ${this.name} first.`);
+				}
 				console.info(`[click link to read => "https://drive.google.com/file/d/0B89dfqio_IykVk9ZMV96TUJESnM/view?usp=sharing"]`)
 				// window.open("https://drive.google.com/file/d/0B89dfqio_IykVk9ZMV96TUJESnM/view?usp=sharing", "_blank");//game.displayItem("assets/2008_Ministry_of_Culture.pdf", "application/pdf", "1440px", "960px");
 			}
@@ -169,6 +181,19 @@ const itemModule = game => {
 		_chair: {
 			name: "chair",
 			takeable: false,
+			description: "It looks like a wooden chair– no more, no less.",
+			use: function () {
+				game.state.objectMode = false;
+				console.p("You sit down on the chair.");
+				const wait = game.commands.filter(command => command[0].name === "_wait")[0][0];
+				wait.call(this);
+			}
+		},
+		_table: {
+			name: "table",
+			takeable: false,
+			listed: false,
+			description: "The cherrywood dining table is long enough to accomodate at least twenty guests, by your estimation, although you can see only one chair."
 		},
 		_desk: {
 			name: "desk",
@@ -189,8 +214,9 @@ const itemModule = game => {
 			name : "safe",
 			closed: true,
 			locked: true,
+			takeable: false,
 			description: "The wall safe looks rugged and well-anchored. You doubt that it could be breached by brute force, and it appears to have already successfully weathered a few such attempts. On its face, a complete alphanumeric keypad resides beneath what looks like a small digital readout.",
-			contents:["key"],
+			contents:[],
 			open: function () {
 				this.unlock.call(this);
 			},
@@ -202,20 +228,12 @@ const itemModule = game => {
 			use: function (){
 				this.unlock.call(this);
 			},
-			// examine: function (){
-			// 	game.state.objectMode = false;
-			// 	if (this.contents.length){
-			// 		const hiddenItem = this.contents.pop();
-			// 		console.p(`${this.description}\nAs you examine the glove, a ${hiddenItem.name} falls out, onto the floor.`);
-			// 		return game.mapKey[game.state.currentCell].addToEnv(hiddenItem.name);
-			// 	} 
-			// 	return this.description;
-			// }
 		},
 
 		_painting: {
 			name: "painting",
 			takeable: true,
+			listed: false,
 			description: "The small, grimy image is of an owl, teaching a class about catching mice, to a classroom of kittens. The rendering of perspective is amateurish, and the depicted animals look hostile and disfigured. It is an awful painting.",
 			previouslyRevealed: false,
 			location: "+",
@@ -292,6 +310,7 @@ const itemModule = game => {
 			weight : 0,
 			description: "The thin ball chain dangling in front of you is exactly the sort often connected to a lightbulb. Perhaps you should \"pull\" it...",
 			takeable: false,
+			listed: false,
 			pull: function (){
 				game.state.objectMode = false;
 				let dark = game.mapKey[game.state.currentCell].hideSecrets;
@@ -312,20 +331,21 @@ const itemModule = game => {
 
 		_glove: {
 			name : "glove",
-			description: "It is a well-worn gray leather work glove. There is nothing otherwise remarkable about it. 🧤",
+			description: "It is a well-worn gray leather work glove. There is nothing otherwise remarkable about it.",
 			contents:[],
 			examine: function (){
 				game.state.objectMode = false;
 				if (this.contents.length){
 					const hiddenItem = this.contents.pop();
 					console.p(`${this.description}\nAs you examine the glove, a ${hiddenItem.name} falls out, onto the floor.`);
-					return game.mapKey[game.state.currentCell].addToEnv(hiddenItem.name);
+					game.mapKey[game.state.currentCell].addToEnv(hiddenItem.name);
+					return;
 				} 
 				return this.description;
 			}
 		},
 
-		_grue_repellant: {
+		_grue_repellant: { 
 			name : "grue_repellant",
 			defective : Math.random() < 0.03,
 			weight : 3,
@@ -342,7 +362,7 @@ const itemModule = game => {
 					return console.p("Nothing happens. This must be one of the Math.random() < 0.03 of grue_repellant cans that were programmed to be, I mean, that were accidentally manufactured defectively. Repeated attempts to coax repellant from the aerosol canister prove equally fruitless.");
 				} else {
 					this.used = true;
-					return console.p("A cloud of repellant hisses from the canister, temporarily obscuring your surroundings. By the time it clears, your head begins to throb, and you feel a dull, leaden taste coating your tongue. The edges of your eyes and nostrils feel sunburnt, and you there is also a burning sensation to accompany an unsteady buzzing in your ears. Although you are not a grue, you find it to be more than somewhat off-putting.");
+					return console.p("A cloud of repellant hisses from the canister, temporarily obscuring your surroundings. By the time it clears, your head begins to throb, and you feel a dull, leaden taste coating your tongue. The edges of your eyes and nostrils feel sunburnt, and there is also a burning sensation to accompany an unsteady buzzing in your ears. Although you are not a grue, you find it to be more than somewhat off-putting.");
 				}
 			},
 			spray: function () {
@@ -365,20 +385,53 @@ const itemModule = game => {
 			},
 			openable: true,
 			closed: true,
+			use: function () {
+				game.state.objectMode = false;
+				if (this.closed) {
+					this.open.call(this);
+				}
+			}
+		},
+		_maps: {
+			name: "maps",
+			article: "some",
+			get description () {
+				this.read();
+				return `The stack of dogeared pages appear to be architectural drawings. With a quick survey of your surroundings, you confirm with reasonable certainty that they are likely floor plans for this house.`;
+			},
+			read: function () {
+				game.state.objectMode = false;
+				if (!game.inInventory(this.name)) {
+					return console.p(`You will need to pick up the ${this.name} first.`);
+				}
+				const currentPosition = game.state.position;
+				const floorMap = game.maps[currentPosition.z].map(row => {
+					return row.map(cell => cell === "*" ? "⬛️" : "🌫");
+				});
+				floorMap[currentPosition.y].splice(currentPosition.x, 1, "⭐️");
+				const croppedMap = floorMap.slice(8).map(row => row.slice(5, 11))
+				console.map(croppedMap);
+			},
+			use: function () {
+				this.read.call(this);
+			}
 		},
 
 		_note: {
 			name : "note",
-			text: `We have your doggo.`,
+			text: `We have your dog.`,
 			firstRead: true,
 			description: "The note is composed of eclectically sourced, cut-out letters, in the style of a movie ransom note. You found it lying next to you on the floor when you regained consciousness.",
 			read: function () {
 				game.state.objectMode = false;
+				if (!game.inInventory(this.name)) {
+					return console.p(`You will need to pick up the ${this.name} first.`);
+				}
 				console.ransom(this.text);
 				if (this.firstRead) {
 					const dogName = randomDogName()
 					game.state.dogName = dogName;
-					console.p(`Your dog, ${dogName}, is your best buddy! Who would do such a thing!?`);
+					console.p(`${dogName} is your best buddy! Who would do such a thing!?`);
 					this.firstRead = false;
 				}
 				

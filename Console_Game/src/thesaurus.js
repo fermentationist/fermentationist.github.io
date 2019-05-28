@@ -3,7 +3,14 @@ const thesaurus = {
         "catalog",
         "catalogue",
         "book",
-        "program"
+        "program",
+        "📓"
+    ],
+
+    burn: [
+        "ignite",
+        "incinerate",
+        "torch"
     ],
 
     contemplate: [
@@ -84,7 +91,18 @@ const thesaurus = {
     ],
     look: [
         "see",
-        "observe"
+        "observe",
+        "status"
+    ],
+    maps: [
+        "map",
+        "plan",
+        "plans",
+        "blueprints",
+        "blueprint",
+    ],
+    matchbook: [
+        "matches"
     ],
     move: [
         "displace",
@@ -155,6 +173,8 @@ const thesaurus = {
         "await",
         "delay",
         "tarry",
+        "chill",
+        "exist",
         "dawdle",
         "dillydally",
         "loiter",
@@ -163,7 +183,8 @@ const thesaurus = {
         "relax",
         "remain",
         "hesitate",
-        "procrastinate"
+        "procrastinate",
+        "sit"
     ]
 }
 const allWords = Object.entries(thesaurus).reduce((accum, entry) => [accum, ...entry]);
