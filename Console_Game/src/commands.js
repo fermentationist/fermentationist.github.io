@@ -18,7 +18,9 @@ const Commands = game => {
 		_quit,
 		_resume,
 		mapKey,
+		displayItem,
 		cases} = game;
+	const toggleVerbosity = game.toggleVerbosity.bind(game);
 	// Change player's location on the map, given a direction
 	const _movePlayer = (direction) => {
 		let newPosition = {
@@ -125,7 +127,7 @@ const Commands = game => {
 		});
 		
 		let segments =  `You are carrying ${game.formatList(itemsPlusArticles)}`.split(" ");
-		// console.log("TCL: segments", segments)
+		
 		let itemStyle = `font-size:120%;color:cyan;font-style:italic;`;
 
 		let styles = segments.map((word) => {
@@ -155,23 +157,29 @@ const Commands = game => {
 
 	// Handles commands that are item names.
 	const _items = (itemName) => {
+        
 		// Exit function with error message if previous command does not require an object
 		
 		if (!game.state.objectMode && itemName !== "maps"){
-			return console.invalid("Invalid command");
+			console.invalid("Invalid command");
+			return;
 		}
 		// Exit function with error message if item is not available in player inventory or current location.
 		const item = game.inEnvironment(itemName) || game.inInventory(itemName);
 		if (!item){
 			game.state.objectMode = false;
-			return console.p(`${itemName} is not available`);
+			console.invalid(`${itemName} is not available.`);
+			return;
 		}
 		const action = game.state.pendingAction;
 		// invoke the item's method that corresponds to the selected action
 		return item[action]();
 	}
 
-		
+	const _yell = () => {
+		console.scream("Aaaarrgh!!!!");
+	}
+
 	const _yes = () => {
 		if (! game.state.confirmMode) {
 			console.p("nope.");
@@ -200,6 +208,14 @@ const Commands = game => {
 		return console.papyracy(">poof<");
 	}
 
+	// const _litany = () => {
+	// 	displayItem({
+	// 	title: "\nUntitled (litany)",
+	// 	artist: "Dennis Hodges",
+	// 	year: "2010",
+	// 	info: "Found audio recordings",
+	// 	source: "https://drive.google.com/file/d/1s02tHvAU0E7dMJgbhUnIPNg8ayWGNmxZ/preview?usp=sharing"});
+	// }
 	// const _papyracy = () => {
 	// 	const font = primaryFont;
 	// 	const color = textColor;
@@ -236,47 +252,41 @@ const Commands = game => {
 		[_movePlayer, cases("down") + ",d,D"],
 
 		// Actions
+		
 		[_go, aliasString("go", thesaurus)],
 		[_wait, aliasString("wait", thesaurus) + ",z,Z,zzz,ZZZ,Zzz"],
-		[_look, cases("look", "see", "observe") + ",l,L"],
+		[_look, aliasString("look", thesaurus) + ",l,L"],
 		[_smell, aliasString("smell", thesaurus)],
 		[_listen, aliasString("listen", thesaurus)],
 		[_inventory, aliasString("inventory", thesaurus) + ",i,I"],
 		[_rezrov, aliasString("rezrov", thesaurus)],
+		[_yell, aliasString("yell", thesaurus)],
 		[_act_upon, aliasString("use", thesaurus)],
 		[_act_upon, aliasString("take", thesaurus)],
 		[_act_upon, aliasString("read", thesaurus)],
 		[_act_upon, aliasString("examine", thesaurus) + ",x,X"],
 		[_act_upon, aliasString("drink", thesaurus)],
 		[_act_upon, aliasString("drop", thesaurus)],
+		[_act_upon, aliasString("eat", thesaurus)],
 		[_act_upon, aliasString("move", thesaurus)],
 		[_act_upon, aliasString("pull", thesaurus)],
 		[_act_upon, aliasString("spray", thesaurus)],
 		[_act_upon, aliasString("contemplate", thesaurus)],
 		[_act_upon, aliasString("unlock", thesaurus)],
 		[_act_upon, aliasString("open", thesaurus)],
+		[_act_upon, aliasString("climb", thesaurus)],
 		[_act_upon, aliasString("close", thesaurus)],
 		[_act_upon, aliasString("lock", thesaurus)],
 		[_act_upon, aliasString("turn", thesaurus)],
 		[_act_upon, aliasString("burn", thesaurus)],
+		[_act_upon, aliasString("light", thesaurus)],
+		[_act_upon, aliasString("play", thesaurus)],
+		[_act_upon, aliasString("project", thesaurus)],
 		[_act_upon, cases("hide")],
 
-		// this command exists as a hacky fix for bug that happens if console is in "eager evalutaion" mode. Starting to type "glove" auto-evalutes to "globalThis", which for some reason calls _act_upon("close"). This command tricks auto-evaluation because it prioritizes suggestions alphabetically.
+		// this command exists as a hacky fix for bug that happens if console is in "eager evalutaion" mode. Starting to type "glove" auto-evalutes to "globalThis", which for some reason calls _act_upon("close"). This same goes for the keyword "this". This command tricks auto-evaluation because it prioritizes suggestions alphabetically.
 		[_none, cases("globaa")],
 		[_none, cases("thia")],
-
-
-		// // Objects
-		// [_items, cases("grue_repellant", "repellant")],
-		// [_items, cases("key")],
-		// [_items, aliasString("note", thesaurus)],
-		// [_items, cases("no_tea")],
-		// [_items, cases("chain")],
-		// [_items, aliasString("glove", thesaurus)],
-		// [_items, cases("catalogue", "catalog")],
-		// [_items, cases("all")],
-
-
 
 		// Misc
 		[_inventoryTable, cases("inventoryTable", "invTable", "invt")],
@@ -303,6 +313,8 @@ const Commands = game => {
 		[_quit, cases("quit")],
 		[_quit, cases("restart")],
 		[_yes, cases("yes") + ",y,Y"],
+		[toggleVerbosity, cases("verbose")],
+
 	];
 	const itemNames = Object.keys(game.items).map(item => item.slice(1));
 	const itemAliases = itemNames.map(item => [_items, aliasString(item, thesaurus)])

@@ -8,28 +8,90 @@ const mapKey = game => {
 		hideSecrets: false, // used to toggle room description and whether player has access to hiddenEnv
 		description: "You find yourself in a non-descript, unremarkable, non-place. Nothing is happening, nor is anything of interest is likely to happen here in the future.", // the default text displayed when player enters or "looks" at room
 		smell: "Your nose is unable to detect anything unusual, beyond the smell of mildew and rot that permeates the entirety of the decrepit building.", // text displayed in response to smell command
-		sound: "The silence is broken only by the faint sound of the wind outside, and the occasional creaking of sagging floorboards underfoot.", // text displayed in response to listen command
+		sound: "The silence is broken only by the faint sound of the wind outside, and the occasional creak of sagging floorboards underfoot.", // text displayed in response to listen command
 		hiddenEnv: [], // items in area that are not described and cannot be interacted with unless hideSecrets = false
 		visibleEnv: [], // items described at the end of game.describeSurroundings() text by default
 		get env (){ // accessor property returns an array containing the names (as strngs) of the items in present environment
-			// if (this.hideSecrets){ //do not include items in hiddenEnv
+			// if (this.hideSecrets) {
 			// 	return this.visibleEnv;
 			// }
-			// return [...this.visibleEnv, ...this.hiddenEnv]; // include the items in hiddenEnv
-			if (this.hideSecrets){
-				return this.visibleEnv;
+			// // this.hiddenEnv = [];
+			// // return this.visibleEnv;
+			// return this.visibleEnv.concat(this.hiddenEnv);
+			// eslint-disable-next-line getter-return
+			return {
+				visibleEnv: this.visibleEnv,
+				containedEnv: this.containedEnv,
+				hiddenEnv: this.hideSecrets ? [] : this.hiddenEnv
 			}
-			this.visibleEnv = this.visibleEnv.concat(this.hiddenEnv);
-			this.hiddenEnv = [];
-			return this.visibleEnv;
 		},
-		set env (newEnv){ // sets accessor property to an array (of strings) of the names of the items in present environment
-			return this.visibleEnv = newEnv;
+		// set env (newEnv){ // sets accessor property to an array (of strings) of the names of the items in present environment
+		// 	return this.visibleEnv = newEnv;
+		// },
+
+		// returns any items in the environment that contain other items and are open, as an array of the item objects
+		get openContainers () {
+			const itemsInEnv = this.hideSecrets ? this.visibleEnv : this.visibleEnv.concat(this.hiddenEnv);
+            
+			const itemsWithContainers = itemsInEnv.filter(item => item.contents && item.contents.length > 0);
+            
+			const openContainerItems = itemsWithContainers.filter(containerItem => {
+				return containerItem.closed === false;
+			});
+            
+			return openContainerItems;
 		},
+
+		// returns the items available in the environment that are nested inside other objects
+		get containedEnv () {
+			const containedItems = this.openContainers.length > 0 ? this.openContainers.map(item => {
+				return item.contents;
+			}) : [];
+			return containedItems.flat();
+		},
+
+		set containedEnv (newEnv) {
+
+		},
+
+		// nestedItemString: function () {
+		// 	const containedItems = this.containedEnv.map(obj => {
+		// 		const name = Object.keys(obj)[0];
+		// 		const objectNames = obj[name].map(item => `${item.article} ${item.name}`);
+		// 		return {[name]: game.formatList(objectNames)};
+		// 	});
+		// 	const containedString = containedItems.map(container => {
+		// 		return `There is ${Object.keys(container)}, containing ${Object.values(container)}.`
+		// 	});
+        //     return containedString.join("\n");
+		// },
 		removeFromEnv: function (item) {
-			const newEnv =  this.env.filter(it => it.name !== item.name);
-			return this.env = newEnv;
+			const envName = game.fromWhichEnv(item.name);
+			if (envName === "containedEnv") {
+				return this.removeFromContainer(item);
+			}
+			const thisEnv = this[game.fromWhichEnv(item.name)];
+			const indexOfItem = thisEnv.map(i => i.name).indexOf(item.name)
+			const newEnv = thisEnv.splice(indexOfItem, 1);
+			// const newEnv =  this.env.filter(it => it.name !== item.name);
+			return this[game.fromWhichEnv(item.name)] = newEnv;
+		},
+		removeFromContainer: function (item) {
+			const [container] =  this.openContainers.filter(thing => thing.contents.includes(item));
+            
+			const filteredContainer = container.contents.filter(thingy => {
+                
+				return thingy !== item
+			});
+
 			
+			const visibleOrHidden = game.fromWhichEnv(container.name)
+            
+			const containerIndex = this[visibleOrHidden].map(thang => thang.name).indexOf(container.name);
+			
+			return this[visibleOrHidden][containerIndex].contents = filteredContainer;
+            
+			// return filteredContainer;
 		},
 		addToEnv: function (itemName) { 
 			// const itemObj = game.items[`_${itemName}`];
@@ -66,25 +128,25 @@ const mapKey = game => {
 		"^": {
 			name: "Second floor hallway, north",
 			description: "You are at the top of a wide wooden staircase, on the second floor of the old house.",
-			visibleEnv: []
+			visibleEnv: ["projector"]
 		},
 
 		"-": {
 			name: "Second floor hallway, south",
 			description: "It looks like there are a couple of rooms on either side of the broad hallway, and a small broom closet at the south end.",
-			visibleEnv: []
+			visibleEnv: ["cartridge"]
 		},
 
 		"+": {
 			name: "Study",
-			visibleDescription: "The walls of the dark, wood-panelled study are lined with bookshelves, containing countless dusty tomes. Behind an imposing walnut desk is a tall-backed desk chair, upholstered in worn mahogany leather.",
+			visibleDescription: "The walls of the dark, wood-panelled study are lined with bookshelves, containing countless dusty tomes. Behind an imposing walnut desk is a tall-backed desk chair.",
 			smell: "The pleasantly musty smell of old books emanates from the bookshelves that line the wall.",
 			hideSecrets: true,
-			visibleEnv: ["desk", "painting", "chair", "bookshelves", "booklet"],
+			visibleEnv: ["desk", "painting", "chair", "bookshelves", "books", "drawer"],
 			hiddenEnv: ["safe"],
 			hiddenDescription: "In space where a painting formerly hung there is a small alcove housing a wall safe.",
 			get description (){
-				const catalogLocation = this.env.map(x=>x.name).includes("booklet") ? "There is a booklet on the desk" : "";
+				const catalogLocation = Object.values(this.env).flat().map(x=>x.name).includes("booklet") ? "There is a booklet on the desk" : "";
 				if (this.hideSecrets) {
 					return this.visibleDescription + "\n" + "On the wall behind the chair hangs an ornately framed painting.";
 				}
@@ -101,13 +163,13 @@ const mapKey = game => {
 		"%": {
 			name: "Entrance hall, south",
 			description: "You are in the main entrance hall of a seemingly abandoned house. There are two doors on either side of the hall. The front door is to the south. At the north end of the hall is a wide oak staircase that connects the first and second floors of the old house.",
-			visibleEnv: ["door", "note"]
+			visibleEnv: ["door", "note", "disc"]
 		},
 
 		"=": {
 			name: "Entrance hall, north",
 			description: "You are in the main entrance hall of a seemingly abandoned house. There are two doors on either side of the hall. The front door is to the south. At the rear of the hall is a wide oak staircase that connects the first and second floors of the old house.",
-			visibleEnv: []
+			visibleEnv: ["phonograph"]
 		},
 
 		"@": {
@@ -117,9 +179,15 @@ const mapKey = game => {
 
 		"$": {
 			name: "Broom closet",
-			hideSecrets: true,
+			hiddenSecrets: true,
 			hiddenEnv: ["glove"],
 			visibleEnv: ["chain"],
+			get hideSecrets () {
+				return game.state.fireCount > 0 ? false : this.hiddenSecrets;
+			},
+			set hideSecrets (trueOrFalse){
+				this.hiddenSecrets = trueOrFalse;
+			},
 			des1: "The small closet is dark, although you can see a small chain hanging in front of you.",
 			get des2 (){
 				const hidden = this.hiddenEnv;

@@ -6,13 +6,22 @@ const thesaurus = {
         "program",
         "📓"
     ],
-
+    bookshelves : [
+        "bookshelf",
+        "shelf",
+        "shelves"
+    ],
     burn: [
         "ignite",
         "incinerate",
         "torch"
     ],
-
+    cartridge: [
+        "movie",
+        "reel",
+        "film",
+        "film_cartridge"
+    ],
     contemplate: [
         "consider",
         "meditate",
@@ -26,15 +35,25 @@ const thesaurus = {
         "mull",
         "ruminate"
     ],
+    cup: [
+        "chalice",
+        "goblet"
+    ],
+    disc: [
+        "record",
+        "album",
+        "forty-five",
+        "disk",
+        "recording",
+        "litany",
+    ],
     drink: [
         "intake",
         "uptake",
         "imbibe",
-        "consume",
-        "ingest",
-        "have",
         "chug",
-        "guzzle"
+        "guzzle",
+        "quaff"
     ],
     drop: [
         "unload",
@@ -47,13 +66,20 @@ const thesaurus = {
         "trash",
         "expel"
     ],
+    eat: [
+        "ingest",
+        "consume",
+        "swallow",
+        "devour"
+    ],
     examine: [
         "analyze",
         "analyse",
         "study",
         "investigate",
         "inspect",
-        "scan"
+        "scan",
+        "search"
     ],
     glove: [
         "mitt",
@@ -102,7 +128,8 @@ const thesaurus = {
         "blueprint",
     ],
     matchbook: [
-        "matches"
+        "matches",
+        "match"
     ],
     move: [
         "displace",
@@ -118,7 +145,11 @@ const thesaurus = {
 	],
 	open: [
 		"unclose"
-	],
+    ],
+    phonograph: [
+        "record_player",
+        "turntable"
+    ],
     pull: [
         "tug",
         "yank",
@@ -127,6 +158,12 @@ const thesaurus = {
     read: [
         "skim",
         "peruse"
+    ],
+    safe: [
+        "alcove",//location of safe in game
+        "strongbox",
+        "vault",
+        "wall_safe"
     ],
     smell: [
         "sniff"
@@ -161,6 +198,7 @@ const thesaurus = {
         "twist"
     ],
     use: [
+        "activate",
         "utilize",
         "utilise",
         "apply",
@@ -185,7 +223,12 @@ const thesaurus = {
         "hesitate",
         "procrastinate",
         "sit"
-    ]
+    ],
+    yell: [
+        "shout",
+        "scream",
+        "cry",
+    ],
 }
 const allWords = Object.entries(thesaurus).reduce((accum, entry) => [accum, ...entry]);
 const duplicates = allWords.filter((word, currentIndex) => allWords.indexOf(word) !== currentIndex)

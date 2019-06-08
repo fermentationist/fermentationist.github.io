@@ -20,6 +20,8 @@ const ConsoleGame = {
 		prefMode: false,
 		confirmMode: false,
 		solveMode: false,
+		verbose: false,
+		fireCount: NaN,
 		inventory: [],
 		history: [],
 		turn: null,
@@ -35,11 +37,17 @@ const ConsoleGame = {
 			y: 13,
 			x: 7
 		},
-		get currentCell (){ 
+		get currentCellCode (){ 
 			return ConsoleGame.maps[this.position.z][this.position.y][this.position.x]
 		},
+		get currentMapCell () {
+			return ConsoleGame.mapKey[this.currentCellCode]
+		},
 		get env (){
-			return ConsoleGame.mapKey[this.currentCell].env;
+			return this.currentMapCell.env;
+		},
+		get combinedEnv () {
+			return Object.values(this.env).flat();
 		},
 		
 	},
@@ -49,9 +57,11 @@ const ConsoleGame = {
 	set mapKey (value) {
 		this.key = value;
 	},
-	immuneCommands: ["help", "start", "commands", "inventory", "inventorytable", "look", "font", "color", "size", "save", "restore", "resume", "_save_slot", "yes", "_0", "_1", "_2", "_3", "_4", "_5", "_6", "_7", "_8", "_9"],
+	immuneCommands: ["help", "start", "commands", "inventory", "inventorytable", "look", "font", "color", "size", "save", "restore", "resume", "verbose", "_save_slot", "yes", "_0", "_1", "_2", "_3", "_4", "_5", "_6", "_7", "_8", "_9"],
 	//===========================================\\
 	turnDemon: function (commandName, interpreterFunction) {
+    
+    
 	// This function runs at the start of each turn\\
 		this.timers();
 		if (this.state.gameOver) {
@@ -67,11 +77,8 @@ const ConsoleGame = {
 				}
 			}
 			interpreterFunction(commandName);
-            
-			if (this.state.solveMode === true && commandName !== "safe") {
-				this.state.solveMode = false;
-				commandName !== "rezrov" ? console.digi("INCORRECT PASSCODE"): null;
-				return;
+			if (this.state.verbose) {
+				this.describeSurroundings();
 			}
 			return;
 		}
@@ -118,6 +125,8 @@ const ConsoleGame = {
 		this.state.prefMode = false;
 		this.state.confirmMode = false;
 		this.state.solveMode = false;
+		this.state.verbose = false;
+		this.state.fireCount = NaN;
 		this.state.inventory = [];
 		this.state.history = [];
 		this.state.turn = 0;
@@ -172,21 +181,20 @@ const ConsoleGame = {
 	},
 
 	describeSurroundings: function (){
-		const name = this.mapKey[this.state.currentCell].name;
-		const turn = this.state.turn;
-		const description = this.mapKey[this.state.currentCell].description;
+		const description = this.state.currentMapCell.description;
 		const itemStr = this.itemsInEnvironment() ? `You see ${this.itemsInEnvironment()} here.` : "";
+		const nestedItemStr = this.nestedItemString(); 
 		const moveOptions = `You can go ${this.movementOptions()}.`;
 		console.header(this.currentHeader());
-		return console.p(description + "\n" + moveOptions + "\n" + itemStr + "\n");
+		return console.p(description + "\n" + moveOptions + "\n" + itemStr + "\n" + nestedItemStr);
 	},
 
 	currentHeader: function (columnWidth = 80){
-		const roomName = this.mapKey[this.state.currentCell].name;
+		const roomName = this.state.currentMapCell.name;
 		const turn = `Turn : ${this.state.turn}`;
 		const gapSize = columnWidth - roomName.length - turn.length;
 		const gap = " ".repeat(gapSize);
-		return `\n${roomName}${gap}${turn}`;
+		return `\n${roomName}${gap}${turn}\n`;
 	},
 
 	inInventory: function (itemName){
@@ -199,30 +207,76 @@ const ConsoleGame = {
 		if (itemName === "all") {
 			return this.items._all;
 		}
-		const environment = this.mapKey[this.state.currentCell].env;
-		const envIndex = environment.map((item) => item.name).indexOf(itemName);
-		const objectFromEnvironment = (envIndex !== -1) && this.mapKey[`${this.state.currentCell}`].env[envIndex];
+		const whichEnv = this.fromWhichEnv(itemName);
+		const objectFromEnvironment = whichEnv ?  this.state.env[whichEnv].filter(item => item.name === itemName)[0] : false;
 		return objectFromEnvironment;
 	},
 
-	itemsInEnvironment: function () {
-		const listedItems = this.state.env.filter(item => item.listed);
-		return listedItems.length && this.formatList(this.state.env.filter(item => item.listed)
-			.map((item) => `${item.article} ${item.name}`));
+	fromWhichEnv: function (itemName) {
+		const itemsInEnvironment = this.state.combinedEnv.map(item => item.name);
+        
+		if (!itemsInEnvironment.includes(itemName)){
+            
+			return false;
+		}
+		const environments = Object.entries(this.state.env).map(entry => {
+			const names = entry[1].length ? entry[1].map(item => item.name) : [];
+			return [entry[0], names]
+		});
+        
+		const theEnv = environments.filter(env => env[1].includes(itemName));
+		return theEnv.length > 0 ? theEnv[0][0] : "containedEnv";
 	},
 
-	displayItem: function (filename, type, width, height) {
-		let contentDiv = document.getElementById("console-game-content");
-		if (! filename){
-			return contentDiv.innerHTML = "";
+	// returns a list of items available in the environment, as a formatted string
+	itemsInEnvironment: function () {
+		const env = this.state.currentMapCell.hideSecrets ? this.state.env.visibleEnv : this.state.env.visibleEnv.concat(this.state.env.hiddenEnv);
+		const listedItems = env.filter(item => item.listed);
+		return listedItems.length && this.formatList(listedItems.map((item) => `${item.article} ${item.name}`));
+	},
+
+	// returns a list of items available in the environment that are nested inside other objects, as a formatted string
+	nestedItemString: function () {
+		const openContainers = this.state.currentMapCell.openContainers;
+        
+		const containedItems = openContainers.map(obj => {
+			const name = `${obj.article} ${obj.name}`;// the name of the container
+			const objectNames = obj.contents.map(item => `${item.article} ${item.name}`);// array of names of the objects inside the container (with articles)
+			return [name, this.formatList(objectNames)];// returns an object with a single property, the name of the container, 
+		});
+        
+		const containedString = containedItems.map(container => {
+			return `There is ${container[0]}, containing ${container[1]}.`
+		});
+		return containedString.join("\n");
+	},
+
+	displayItem: function (galleryItem = {title: "untitled", artist: "unknown", info: null, source: "", dimensions: null}) {
+		const contentDiv = document.getElementById("console-game-content");
+		contentDiv.innerHTML = "";
+		contentDiv.setAttribute("style", "background-color:#D1D1D1;")
+		const iFrame = document.createElement("iframe");
+		iFrame.src = galleryItem.source;
+		iFrame.autoplay = true;
+		iFrame.setAttribute("style", "width:100vw;height:80vh;background-color:gray;top:0;position:sticky;");
+		const p = document.createElement("p");
+		p.setAttribute("style", "text-align:center;")
+		const title = document.createElement("h2");
+		title.setAttribute("style", "color:black;");
+		const artist = title.cloneNode(true);
+		title.innerHTML = `Title: ${galleryItem.title}`;
+		artist.innerHTML = `Artist: ${galleryItem.artist}`;
+		p.appendChild(title);
+		p.appendChild(artist);
+		contentDiv.appendChild(iFrame);
+		contentDiv.appendChild(p);
+		if (galleryItem.info) {
+			const info = document.createElement("p");
+			info.innerHTML = galleryItem.info;
+			info.setAttribute("style", "color:black;font-style:italic;text-align:center;font-size:1em;padding-bottom:2em;");
+			contentDiv.appendChild(info);
 		}
-		let objElement = document.createElement("object");
-		objElement.setAttribute("data", filename);
-		objElement.setAttribute("type", type);
-		objElement.setAttribute("width", width || "600px");
-		objElement.setAttribute("height", height || "300px");
-		contentDiv.innerHTML = ""
-		return contentDiv.append(objElement);
+		window.scroll(0, 10000);
 	},
 
 	timers: function () {
@@ -238,11 +292,15 @@ const ConsoleGame = {
 		if (this.state.turn >= this.timeLimit && ! this.state.gameOver) {
 			return this.dead("You don't feel so well. It never occurs to you, as you crumple to the ground, losing consciousness for the final time, that you have been poisoned by an odorless, invisible, yet highly toxic gas.");
 		}
-		if (this.state.solveMode === true && this.pendingAction !== "safe") {
-			this.state.solveMode = false;
-			this.pendingAction !== "rezrov" ? console.digi("INCORRECT PASSCODE"): null;
-			return;
+		if (this.state.fireCount -- === 0 ){
+			
+			console.p("Despite your best efforts the flame flickers out.");
 		}
+		// if (this.state.solveMode === true && this.pendingAction !== "safe") {
+		// 	this.state.solveMode = false;
+		// 	this.pendingAction !== "rezrov" ? console.digi("INCORRECT PASSCODE"): null;
+		// 	return;
+		// }
 	},
 
 	dead: function (text) {
@@ -430,6 +488,20 @@ const ConsoleGame = {
 		localStorage.setItem("ConsoleGame.prefMode", "true");
 		location.reload();
 	},
+	solveCode: function (value){
+		this.state.solveMode = false;
+		const puzzles = this.state.combinedEnv.filter(item => item.solution);
+		if (puzzles.length < 1) {
+			return;
+		}
+		const solved = puzzles.filter(puzzle => puzzle.solution === value);
+		if (solved.length === 0){
+			puzzles.forEach(unsolved => unsolved.incorrectGuess());
+			return;
+		}
+		solved.forEach(pzl => pzl.correctGuess());
+		return;
+	},
 
 	unfinishedGame: function () {
 		return window.localStorage.getItem("ConsoleGame.history");
@@ -480,7 +552,7 @@ const ConsoleGame = {
 		return options;
 	}, 
 	preface: function () {
-		console.p("You slowly open your eyes. Your eyelids aren't halfway open before the throbbing pain in your head asserts itself. The last thing you can remember is taking your dog for a walk after work, but you ceratinly don't remember being here before.");
+		console.p("You slowly open your eyes. Your eyelids aren't halfway open before the throbbing pain in your head asserts itself. The last thing you can remember is taking your dog for a walk after work, but you certainly don't remember being here before.");
 	},
 	stockDungeon: function (subEnvName){
 		Object.keys(this.mapKey).map((key) => {
@@ -504,7 +576,8 @@ const ConsoleGame = {
 		this.stockDungeon("visibleEnv");
 		this.items._glove.contents.push(this.items._matchbook);
 		this.items._safe.contents.push(this.items._key);
-		this.addToInventory([this.items._grue_repellant, this.items._no_tea]);
+		this.items._drawer.contents.push(this.items._card);
+		this.addToInventory([this.items._grue_repellant, this.items._no_tea, this.items._matchbook]);
 	
 	},
 
@@ -535,39 +608,26 @@ const ConsoleGame = {
 		// Greeting to be displayed at the beginning of the game
 		const baseStyle = `font-family:${primaryFont};color:pink;font-size:105%;line-height:1.5;`;
 		const italicCodeStyle = "font-family:courier;color:#29E616;font-size:115%;font-style:italic;line-height:2;";
-		const codeStyle = "font-family:courier;color:#29E616;font-size:115%;line-height:1.5;";/*
-		const text_0 = ["Due to the limitations of the browser console as a medium, the commands you may enter can only be one-word long, with no spaces. "];
-		console.codeInline(text_0, baseStyle, null);
-		const text_1 = [
-			"However, two-word commands may be constructed on two separate lines. For example, if you wanted to examine the glove, you would first type ",
-			"examine ",
-			"to which the game would respond ",
-			"What would you like to examine? ",
-			"Then you would type the object of your intended action, ",
-			"glove",
-			", to complete the command."
-		];
-		console.codeInline(text_1, baseStyle, codeStyle)
-		const text_2 = [
-			"Alternately, you may enter both words on the same line, provided they are separated with a semicolon and no spaces, i.e ",
-			"examine;glove"
-		]
-		console.codeInline(text_2, baseStyle, codeStyle);*/
-	
+		const codeStyle = "font-family:courier;color:#29E616;font-size:115%;line-height:1.5;";
 		const text = ["Valid commands are one word long, with no spaces. Compound commands consist of at most two commands, separated by a carriage return or a semicolon. For example:\n", "get\n", "What would you like to take?\n", "lamp\n", "You pick up the lamp.\n","or,\n", "get;lamp\n", "What would you like to take?\nYou pick up the lamp."];
 		const styles = [baseStyle, codeStyle, italicCodeStyle, codeStyle, italicCodeStyle, baseStyle, codeStyle, italicCodeStyle];
 		console.inline(text, styles);
-
 		const text_2 = ["Typing ", "inventory ", "or ", "i ", "will display a list of any items the player is carrying. \nTyping ", "look ", "or ", "l ", "will give you a description of your current environs in the game. \nCommands with prepositions are not presently supported, and ", "look ", "can only be used to \"look around\", and not to \"look at\" something. Please instead use ", "examine ", "or its shortcut ", "x ", "to investigate an item's properties. \nThe player may move in the cardinal directions– ", "north", ", ", "south", ", ", "east", " and ", "west ", "as well as ", "up ", "and ", "down. ", "Simply type the direction you want to move. These may be abbreviated as ", "n", ", ", "s", ", ", "e", ", ", "w", ", ", "u ", "and ", "d ", ", respectively."];
-		
 		console.codeInline(text_2, baseStyle, codeStyle);
-
 		const text_3 = ["You may save your game progress (it will be saved to localStorage) by typing ", "save", ". You will then be asked to select a save slot, ", "_0 ", "through ", "_9 ", "(remember, user input can't begin with a number). Typing ", "help ", "will display the in-game help text."];
 	
 		console.codeInline(text_3, baseStyle, codeStyle);
 		console.codeInline(this.introOptions(this.state.turn));
 	},
-
+	toggleVerbosity: function () {
+		if (this.state.verbose) {
+			this.state.verbose = false;
+			console.p("Verbose mode off.");
+			return;
+		}
+		this.state.verbose = true;
+		console.p("Maximum verbosity.");
+	},
 	_commands: function () {
 		const commands = this.commands.map(cmd => {
 			const [fn, aliases] = cmd
@@ -581,12 +641,16 @@ const ConsoleGame = {
 		});
 		console.table(commandTable);
 	},
+	setValue: function (value) {
+		return this.state.solveMode ? this.solveCode(value) : this.state.prefMode ? this.setPreference(value) : console.invalid("setValue (_) called out of context.");
+	}
 }
 
 // this function enables user to set preferences
-window._ = (value) => {
-	return ConsoleGame.setPreference(value);
-}
+window._ = ConsoleGame.setValue.bind(ConsoleGame);
+// window._ = (value) => {
+// 	return ConsoleGame.state.solveMode ? ConsoleGame.solveCode(value) : ConsoleGame.state.prefMode ? ConsoleGame.setPreference(value) : console.invalid("setValue (_) called out of context.");
+// }
 // include imported items
 ConsoleGame.items = itemModule(ConsoleGame);
 // include imported commands
