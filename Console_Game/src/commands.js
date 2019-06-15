@@ -23,6 +23,7 @@ const Commands = game => {
 	const toggleVerbosity = game.toggleVerbosity.bind(game);
 	// Change player's location on the map, given a direction
 	const _movePlayer = (direction) => {
+		game.objectMode = false;
 		let newPosition = {
 			x: game.state.position.x,
 			y: game.state.position.y,
@@ -54,6 +55,7 @@ const Commands = game => {
 		// Exit function if movement in given direction is not possible due to map boundary
 		if (newCell === "*"){
 			console.p("You can't go that direction");
+			game.state.abortMode = true;// don't count failed move as a turn; don't increment timers
 			return;
 		}
 		// Display message and exit function if path to next space is blocked by a locked or closed door or analagous item
@@ -79,14 +81,12 @@ const Commands = game => {
 	}
  
 	const _smell = command => {
-		const currentCell = game.state.currentCell;
-		console.p(game.mapKey[currentCell].smell);
+		console.p(game.state.currentMapCell.smell);
 		return;
 	}
 
 	const _listen = command => {
-		const currentCell = game.state.currentCell;
-		console.p(game.mapKey[currentCell].sound);
+		console.p(game.state.currentMapCell.sound);
 		return;
 	}
 	// Handles commands that require an object. Sets pendingAction to the present command, and objectMode so that next command is interpreted as the object of the pending command.                               
@@ -153,13 +153,11 @@ const Commands = game => {
 			return {name, description};
 		})
 		return console.table(table, ["name", "description"]);
-}
+	}
 
 	// Handles commands that are item names.
 	const _items = (itemName) => {
-        
 		// Exit function with error message if previous command does not require an object
-		
 		if (!game.state.objectMode && itemName !== "maps"){
 			console.invalid("Invalid command");
 			return;
@@ -168,12 +166,12 @@ const Commands = game => {
 		const item = game.inEnvironment(itemName) || game.inInventory(itemName);
 		if (!item){
 			game.state.objectMode = false;
-			console.invalid(`${itemName} is not available.`);
+			console.p(`The ${itemName} is unavailable.`);
 			return;
 		}
 		const action = game.state.pendingAction;
 		// invoke the item's method that corresponds to the selected action
-		return item[action]();
+		item[action]();
 	}
 
 	const _yell = () => {
@@ -190,16 +188,13 @@ const Commands = game => {
 		}
 	}
 
-	const _rezrov = () => {
-		const safe = game.items._safe;
-		if (game.state.solveMode){
-			safe.locked = false;
-			console.digi("PASSCODE ACCEPTED");
-			console.p(`With a sudden 'thunk', a bolt moves inside the door of the safe, which gently pops open. ${safe.contents.length > 0 ? "Inside, you see " + game.formatList(safe.contents) + "." : ""}`);
-			return;
-		}
-		console.invalid("Invalid command");
-		return;
+	const _again = () => {
+		console.log("TCL: _again -> game.state.pendingAction", game.state.pendingAction)
+		
+		console.log("TCL: _again -> game.state.history", game.state.history)
+		const lastCommand = game.state.history[game.state.history.length - 1];
+        console.log("TCL: _again -> lastCommand", lastCommand)
+
 	}
 
 	const _poof = () => {
@@ -208,21 +203,14 @@ const Commands = game => {
 		return console.papyracy(">poof<");
 	}
 
-	// const _litany = () => {
-	// 	displayItem({
-	// 	title: "\nUntitled (litany)",
-	// 	artist: "Dennis Hodges",
-	// 	year: "2010",
-	// 	info: "Found audio recordings",
-	// 	source: "https://drive.google.com/file/d/1s02tHvAU0E7dMJgbhUnIPNg8ayWGNmxZ/preview?usp=sharing"});
-	// }
 	// const _papyracy = () => {
-	// 	const font = primaryFont;
-	// 	const color = textColor;
-	// 	return function papyracy () {
-	// 		primaryFont = primaryFont === "Papyrus" ? "";
-	// 		textColor = "chartreuse";
-	// 	}
+	// 	// game.state.pendingAction = "font"
+	// 	game.state.prefMode = true;
+	// 	// game.setPreference("papyrus");
+	// 	localStorage.setItem("ConsoleGame.prefs.font", "papyrus");
+	// 	localStorage.setItem("ConsoleGame.prefMode", "true");
+	// 	// game.state.prefMode = false;
+	// 	location.reload();
 	// }
 
 	const aliasString = (word, thesaurus = null, optionalString = "") => {
@@ -238,11 +226,10 @@ const Commands = game => {
 		}
 		return `${cases(word)},${variations.join()}${optionalString ? "," +optionalString : ""}`;
 	}
-	// Command aliases
+
+	// Commands and their aliases
 	const commandAliases = [
-		// Start
-		[_start, cases("start", "begin", "commence")],
-		[_resume, cases("resume")],
+		
 		// Move
 		[_movePlayer, cases("north") + ",n,N"],
 		[_movePlayer, cases("south") + ",s,S"],
@@ -251,49 +238,60 @@ const Commands = game => {
 		[_movePlayer, cases("up") + ",u,U"],
 		[_movePlayer, cases("down") + ",d,D"],
 
-		// Actions
-		
+		// Direct Actions
 		[_go, aliasString("go", thesaurus)],
-		[_wait, aliasString("wait", thesaurus) + ",z,Z,zzz,ZZZ,Zzz"],
+		[_inventory, aliasString("inventory", thesaurus) + ",i,I"],
+		[_listen, aliasString("listen", thesaurus)],
 		[_look, aliasString("look", thesaurus) + ",l,L"],
 		[_smell, aliasString("smell", thesaurus)],
-		[_listen, aliasString("listen", thesaurus)],
-		[_inventory, aliasString("inventory", thesaurus) + ",i,I"],
-		[_rezrov, aliasString("rezrov", thesaurus)],
+		[_wait, aliasString("wait", thesaurus) + ",z,Z,zzz,ZZZ,Zzz"],
 		[_yell, aliasString("yell", thesaurus)],
-		[_act_upon, aliasString("use", thesaurus)],
-		[_act_upon, aliasString("take", thesaurus)],
-		[_act_upon, aliasString("read", thesaurus)],
-		[_act_upon, aliasString("examine", thesaurus) + ",x,X"],
+		[_again, aliasString("again", thesaurus) + ",g,G"],
+
+
+		// Item methods
+		[_act_upon, aliasString("burn", thesaurus)],
+		[_act_upon, aliasString("climb", thesaurus)],
+		[_act_upon, aliasString("close", thesaurus)],
+		[_act_upon, aliasString("contemplate", thesaurus)],
 		[_act_upon, aliasString("drink", thesaurus)],
 		[_act_upon, aliasString("drop", thesaurus)],
 		[_act_upon, aliasString("eat", thesaurus)],
-		[_act_upon, aliasString("move", thesaurus)],
-		[_act_upon, aliasString("pull", thesaurus)],
-		[_act_upon, aliasString("spray", thesaurus)],
-		[_act_upon, aliasString("contemplate", thesaurus)],
-		[_act_upon, aliasString("unlock", thesaurus)],
-		[_act_upon, aliasString("open", thesaurus)],
-		[_act_upon, aliasString("climb", thesaurus)],
-		[_act_upon, aliasString("close", thesaurus)],
-		[_act_upon, aliasString("lock", thesaurus)],
-		[_act_upon, aliasString("turn", thesaurus)],
-		[_act_upon, aliasString("burn", thesaurus)],
+		[_act_upon, aliasString("examine", thesaurus) + ",x,X"],
+		[_act_upon, aliasString("extinguish", thesaurus)],
+		[_act_upon, aliasString("flush", thesaurus)],
+		// [_act_upon, aliasString("hide", thesaurus)],
 		[_act_upon, aliasString("light", thesaurus)],
+		[_act_upon, aliasString("lock", thesaurus)],
+		[_act_upon, aliasString("move", thesaurus)],
+		[_act_upon, aliasString("open", thesaurus)],
 		[_act_upon, aliasString("play", thesaurus)],
 		[_act_upon, aliasString("project", thesaurus)],
-		[_act_upon, cases("hide")],
-
-		// this command exists as a hacky fix for bug that happens if console is in "eager evalutaion" mode. Starting to type "glove" auto-evalutes to "globalThis", which for some reason calls _act_upon("close"). This same goes for the keyword "this". This command tricks auto-evaluation because it prioritizes suggestions alphabetically.
-		[_none, cases("globaa")],
-		[_none, cases("thia")],
-
+		[_act_upon, aliasString("pull", thesaurus)],
+		[_act_upon, aliasString("read", thesaurus)],
+		[_act_upon, aliasString("rezrov", thesaurus)],
+		[_act_upon, aliasString("cast", thesaurus)],
+		[_act_upon, aliasString("spray", thesaurus)],
+		[_act_upon, aliasString("take", thesaurus)],
+		[_act_upon, aliasString("turn", thesaurus)],
+		[_act_upon, aliasString("unlock", thesaurus)],
+		[_act_upon, aliasString("use", thesaurus)],
+		
 		// Misc
-		[_inventoryTable, cases("inventoryTable", "invTable", "invt")],
-		[_help, cases("help") + ",h,H"],
 		[_commands, cases("commands") + ",c,C"],
+		[_help, cases("help") + ",h,H"],
+		[_inventoryTable, cases("inventoryTable", "invTable", "invt")],
+		// [_papyracy, cases("papyracy")],
+		[toggleVerbosity, cases("verbose")],
+		[_yes, cases("yes") + ",y,Y"],
 
-		// [_all, cases("all")],
+		// Start/QUIT
+		[_start, cases("start", "begin", "commence")],
+		[_resume, cases("resume", "proceed")],
+		[_quit, cases("quit", "restart")],
+		[_quit, cases("restart")],
+
+		// Save/Restore
 		[_save, cases("save")],
 		[_save_slot, "_0"],
 		[_save_slot, "_1"],
@@ -305,15 +303,20 @@ const Commands = game => {
 		[_save_slot, "_7"],
 		[_save_slot, "_8"],
 		[_save_slot, "_9"],
-		[_restore, cases("restore", "load")],
+
+		// Prefs 
 		[_pref, cases("font")],
 		[_pref, cases("color")],
 		[_pref, cases("size")],
 		[_poof, cases("poof")],
-		[_quit, cases("quit")],
-		[_quit, cases("restart")],
-		[_yes, cases("yes") + ",y,Y"],
-		[toggleVerbosity, cases("verbose")],
+
+		// this command exists as a kludgy fix for a bug that happens if console is in "eager evaluation" mode. Starting to type "glove" auto-evaluates to "globalThis", which for some reason calls _act_upon("close"). This same goes for the keyword "this". This command tricks auto-evaluation because it prioritizes suggestions alphabetically.
+		[_none, cases("globaa")],
+		[_none, cases("thia")],
+		
+		
+		
+		
 
 	];
 	const itemNames = Object.keys(game.items).map(item => item.slice(1));
@@ -322,6 +325,6 @@ const Commands = game => {
 
 	// ALIASES = aliases;
 	return aliases;
-};//)();
+};
 
 export default Commands;

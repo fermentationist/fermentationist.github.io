@@ -1,5 +1,8 @@
+import consoleGame from "./game.js";
+import {randomDogName} from "./dogNames.js";
+// ===========//ItemModule//===========
 const itemModule = game => {
-	const Item = {
+	const ItemProto = {
 		name : "Item",
 		used : false,
 		weight : 1,
@@ -48,7 +51,7 @@ const itemModule = game => {
 		},
 		close: function () {
 			game.state.objectMode = false;
-			if (!game.inEnvironment(this.name) && !game.inInventory(this.name)) {
+			if (!game.inEnvironment(this.name)) {
 				console.p(`You don't see ${this.article} ${this.name} here.`);
 				return;
 			}
@@ -62,9 +65,6 @@ const itemModule = game => {
 			}
 			console.p(`The ${this.name} is now closed.`);
 			this.closed = true;
-			if (this.closedTarget){
-				game.mapKey[this.closedTarget].closed = true;
-			}
 			return;
 		},
 		correctGuess: function () {
@@ -118,9 +118,6 @@ const itemModule = game => {
 			if (game.inInventory(this.unlockedBy)){
 				this.locked = true;
 				console.p(`Using the ${this.unlockedBy}, you lock the ${this.name}`);
-				if (this.lockedTarget){
-					game.mapKey[this.lockedTarget].locked = true;
-				}
 				return;
 			}
 			console.p(`You do not have the means to lock the ${this.name}.`)
@@ -149,9 +146,6 @@ const itemModule = game => {
 			}
 			console.p(`The ${this.name} is now open.`);
 			this.closed = false;
-			if (this.closedTarget){
-				game.mapKey[this.closedTarget].closed = false;
-			}
 			return;
 		},
 		read: function () {
@@ -172,6 +166,7 @@ const itemModule = game => {
 				return;
 			}
 			
+			console.log("TCL: this.locked", this.locked)
 			this.locked = false;
 			this.closed = false;
 			if (this.lockedTarget) {
@@ -182,12 +177,12 @@ const itemModule = game => {
 			}
 			console.p("Once the rezrov spell is cast, the magic scroll disappears with a sudden flash, and a loud \"WHOMP!\"");
 			console.p(`When the smoke has cleared, the ${this.name} has been magically unlocked and opened!`);
-			if (game.inInventory("scroll")) {
-				game.removeFromInventory(game.items._scroll);
-				return;
-			}
 			if (game.inEnvironment("scroll")) {
 				game.state.currentMapCell.removeFromEnv(game.items._scroll);
+				return;
+			}
+			if (game.inInventory("scroll")) {
+				game.removeFromInventory(game.items._scroll);
 				return;
 			}
 		},
@@ -226,9 +221,6 @@ const itemModule = game => {
 			if (game.inInventory(this.unlockedBy)){
 				this.locked= false;
 				console.p(`Using the ${this.unlockedBy}, you are able to unlock the ${this.name}`);
-				if (this.lockedTarget){
-					game.mapKey[this.lockedTarget].locked = false;
-				}
 				return;
 			}
 			console.p(`You do not have the means to unlock the ${this.name}.`)
@@ -261,29 +253,6 @@ const itemModule = game => {
 					return;
 				});
 			},
-		},
-		_backdoor: {
-			name: "door",
-			locked: true,
-			proto: "_door",
-			unlockedBy: "key",
-			lockedTarget: "a",
-			closedTarget: "a",
-			// unlock: function () {
-			// 	Object.getPrototypeOf(this).unlock(this)
-			// },
-			// open: function () {
-			// 	Object.getPrototypeOf(this).open.call(this)
-			// }
-		},
-		_basement_door: {
-			name: "door",
-			locked: true,
-			closed: true,
-			listed: true,
-			proto: "_door",
-			unlockedBy: "old_key",
-			lockedTarget: "I"
 		},
 		_bathtub: {
 			name: "bathtub",
@@ -478,8 +447,29 @@ const itemModule = game => {
 			closedTarget: "A",
 			get description() {
 				game.state.objectMode = false;
-				return `The massive wooden door, darkened with generations of dirt and varnish, is secured with a sturdy new deadbolt, which is ${!this.locked ? "unlocked." : "locked."}${this.closed ? "" : "\nThe door is open."}`
+				return `The massive wooden door, darkened with generations of dirt and varnish, is secured with a sturdy new deadbolt, which is ${!this.closed ? "open!" : !this.locked ? "unlocked!" : "locked."}`
 			},
+			lock() {
+				Object.getPrototypeOf(this).lock.call(this);
+				game.mapKey[this.lockedTarget].locked = true;
+				return;
+			},
+			unlock() {
+				Object.getPrototypeOf(this).unlock.call(this);
+				game.mapKey[this.lockedTarget].locked = false;
+				return;
+			},
+			open() {
+				Object.getPrototypeOf(this).open.call(this);
+				game.mapKey[this.closedTarget].closed = false;
+				return;
+			},
+			close() {
+				Object.getPrototypeOf(this).close.call(this);
+				game.mapKey[this.closedTarget].closed = true;
+				return;
+			}
+
 		},
 		_drawer: {
 			name: "drawer",
@@ -507,7 +497,11 @@ const itemModule = game => {
 					game.items.desk.closed = true;
 				}
 			}
-		},
+        },
+        _dresser: {
+            name: "dresser",
+            proto: "_table"
+        },
 		_filthy_note: {
 			name: "filthy_note",
 			text: `Dear John,\nI'm leaving. After all of this time, I said it. But I want you to understand that it is not because of you, or something you've done (you have been a loving and loyal partner). It is I who have changed. I am leaving because I am not the person who married you so many years ago; that, and the incredibly low, low prices at Apple Cabin. Click here ==> http://liartownusa.tumblr.com/post/44189893625/apple-cabin-foods-no-2 to see why I prefer their produce for its quality and respectability.`,
@@ -647,7 +641,10 @@ const itemModule = game => {
 			light: function () {
 				this.use.call(this);
 			}
-		},
+        },
+        _nightstand: {
+            proto: "_table"
+        },
 		_no_tea: {
 			name: "no_tea",
 			weight: 0,
@@ -704,12 +701,6 @@ const itemModule = game => {
 				}
 
 			},
-		},
-		_old_key: {
-			name: "old_key",
-			article: "an",
-			description: "It is an old-fashioned key, made of heavy, tarnished bronze.",
-			proto: "_key"
 		},
 		_painting: {
 			name: "painting",
@@ -861,9 +852,6 @@ const itemModule = game => {
 			use: function (){
 				return window.rezrov;
 			},
-			cast: function () {
-				this.use.call(this)
-			}
 		},
 		_sink: {
 			name: "sink",
@@ -914,18 +902,42 @@ const itemModule = game => {
 	}
 	
 	// Prototype-links each of the objects in items to either Item or other prototype, if defined
-
-	const initializeItems = (itemDefinitions) => {
-		for (let itemName in itemDefinitions) {
-			let item = itemDefinitions[itemName];
-			const definedProto = item.proto;
-			const protoToApply = definedProto ? itemDefinitions[definedProto] : Item;
-			Object.setPrototypeOf(item, protoToApply);
-		}
-		return itemDefinitions;
-	}
-
-	return initializeItems(items);
+	// Object.keys(items).map((itemInstance) => {
+	// 	const protoProperty = items[itemInstance].proto;
+	// 	const prototype = protoProperty ? items[protoProperty] : Item
+	// 	Object.setPrototypeOf(items[itemInstance], prototype);
+	// });
+    // for (let item in items) {
+	// 	const protoProperty = items[item].proto;
+	// 	const prototype = protoProperty ? items[protoProperty] : Item
+	// 	Object.setPrototypeOf(items[item], prototype);
+    // }
+    // const NewItem = itemName => {
+    //     const newItem = {...items[itemName]};
+    //     const protoProperty = items[itemName].proto;
+	// 	const prototype = protoProperty ? items[protoProperty] : Item
+    //     Object.setPrototypeOf(newItem, prototype);
+    //     return newItem;
+    // }
+    // for (let item in items) {
+    //     const finishedItem = new NewItem(item);
+    //     console.log("TCL: finishedItem", finishedItem);
+    //     return finishedItem;
+    // }
+    // return items;
+    
+    function Item (itemName) {
+        console.log("TCL: Item -> itemName", itemName)
+        const newItem = {...items[itemName]};
+        const protoProperty = items[itemName].proto;
+        console.log("TCL: Item -> newItem", newItem)
+		const prototype = protoProperty ? items[protoProperty] : ItemProto;
+        console.log("TCL: Item -> prototype", prototype)
+        Object.setPrototypeOf(newItem, prototype);
+        return newItem;
+    }
+    
+    return {Item, items}
 };
 
 export default itemModule;

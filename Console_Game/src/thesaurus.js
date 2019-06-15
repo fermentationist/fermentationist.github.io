@@ -1,4 +1,8 @@
 const thesaurus = {
+    bed: [
+        "bedframe",
+        "mattress"
+    ],
     booklet: [
         "catalog",
         "catalogue",
@@ -14,13 +18,17 @@ const thesaurus = {
     burn: [
         "ignite",
         "incinerate",
-        "torch"
+        "immolate"
     ],
     cartridge: [
         "movie",
         "reel",
         "film",
         "film_cartridge"
+    ],
+    collar: [
+        "dog_collar",
+        "leash"
     ],
     contemplate: [
         "consider",
@@ -64,7 +72,9 @@ const thesaurus = {
         "release",
         "shitcan",
         "trash",
-        "expel"
+        "expel",
+        "abandon",
+        "forsake"
     ],
     eat: [
         "ingest",
@@ -80,6 +90,9 @@ const thesaurus = {
         "inspect",
         "scan",
         "search"
+    ],
+    extinguish: [
+        "douse",
     ],
     glove: [
         "mitt",
@@ -108,6 +121,10 @@ const thesaurus = {
         "hoard",
         "possessions",
         "belongings"
+    ],
+    lantern: [
+        "lamp",
+        "torch",
     ],
     listen: [
         "hear"
@@ -146,9 +163,21 @@ const thesaurus = {
 	open: [
 		"unclose"
     ],
+    painting: [
+        "canvas",
+        "artwork",
+    ],
     phonograph: [
         "record_player",
         "turntable"
+    ],
+    photo: [
+        "photograph",
+        "picture",
+        "pic",
+        "portrait",
+        "frame",
+        "picture_frame"
     ],
     pull: [
         "tug",
@@ -164,6 +193,11 @@ const thesaurus = {
         "strongbox",
         "vault",
         "wall_safe"
+    ],
+    scroll: [
+        "strap",// the strap binding the scroll
+        "parchment",
+        "spell"
     ],
     smell: [
         "sniff"
@@ -190,6 +224,12 @@ const thesaurus = {
         "confiscate",
         "retrieve",
         "remove"
+    ],
+    toilet: [
+        "commode",
+        "crapper",
+        "loo",
+        "head",
     ],
     turn: [
         "flip",
