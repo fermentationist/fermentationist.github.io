@@ -188,14 +188,21 @@ const Commands = game => {
 		}
 	}
 
-	const _again = () => {
-		console.log("TCL: _again -> game.state.pendingAction", game.state.pendingAction)
-		
-		console.log("TCL: _again -> game.state.history", game.state.history)
-		const lastCommand = game.state.history[game.state.history.length - 1];
-        console.log("TCL: _again -> lastCommand", lastCommand)
-
+	const _score = () => {
+		console.p(`Your score is ${game.state.score} of a possible ${game.state.maxScore} points.`);
 	}
+
+	// const _again = () => {
+	// 	const lastCommand = game.state.history[game.state.history.length - 1];
+	// 	const itemNames = Object.keys(game.items).map(key => key.slice(1));
+    //     if (itemNames.includes(lastCommand)){
+	// 		const [pendingActionFn] = game.commands.filter(entry => entry[1].split(",")[0] === game.state.pendingAction)[0];
+	// 		pendingActionFn.call(this);
+	// 	}
+	// 	const [lastCommandFn] = game.commands.filter(entry => entry[1].split(",")[0] === lastCommand)[0];
+	// 	lastCommandFn.call(this);
+	// 	return;
+	// }
 
 	const _poof = () => {
 		const body = document.querySelector("body");
@@ -246,7 +253,7 @@ const Commands = game => {
 		[_smell, aliasString("smell", thesaurus)],
 		[_wait, aliasString("wait", thesaurus) + ",z,Z,zzz,ZZZ,Zzz"],
 		[_yell, aliasString("yell", thesaurus)],
-		[_again, aliasString("again", thesaurus) + ",g,G"],
+		// [_again, aliasString("again", thesaurus) + ",g,G"],
 
 
 		// Item methods
@@ -271,6 +278,7 @@ const Commands = game => {
 		[_act_upon, aliasString("read", thesaurus)],
 		[_act_upon, aliasString("rezrov", thesaurus)],
 		[_act_upon, aliasString("cast", thesaurus)],
+		[_act_upon, aliasString("rescue", thesaurus)],
 		[_act_upon, aliasString("spray", thesaurus)],
 		[_act_upon, aliasString("take", thesaurus)],
 		[_act_upon, aliasString("turn", thesaurus)],
@@ -284,6 +292,9 @@ const Commands = game => {
 		// [_papyracy, cases("papyracy")],
 		[toggleVerbosity, cases("verbose")],
 		[_yes, cases("yes") + ",y,Y"],
+		[_score, cases("score")],
+		// [_items, cases("dog", game.state.dogName)],
+
 
 		// Start/QUIT
 		[_start, cases("start", "begin", "commence")],
@@ -314,13 +325,9 @@ const Commands = game => {
 		[_none, cases("globaa")],
 		[_none, cases("thia")],
 		
-		
-		
-		
-
 	];
 	const itemNames = Object.keys(game.items).map(item => item.slice(1));
-	const itemAliases = itemNames.map(item => [_items, aliasString(item, thesaurus)])
+	const itemAliases = itemNames.map(item => [_items, aliasString(item, thesaurus)]);
 	const aliases = commandAliases.concat(itemAliases);
 
 	// ALIASES = aliases;

@@ -4,7 +4,6 @@ import mapKeyModule from "./mapkey.js";
 import itemModule from "./items.js";
 import commandsList from "./commands.js";
 import customConsole from "./console_styles.js";
-import spells from "./spells.js";
 import {randomDogName} from "./dogNames.js"
 
 // consoleGame.state object stores player position, inventory, number of turns, history of player actions, and some methods to update the object's values.
@@ -646,7 +645,7 @@ const ConsoleGame = {
 		console.table(commandTable);
 	},
 	setValue: function (value) {
-		return this.state.solveMode ? this.solveCode(value) : this.state.prefMode ? this.setPreference(value) : console.invalid("setValue (_) called out of context.");
+		return this.state.solveMode ? this.solveCode(value) : this.state.prefMode ? this.setPreference(value) : console.invalid("setValue _() called out of context.");
 	}
 }
 
