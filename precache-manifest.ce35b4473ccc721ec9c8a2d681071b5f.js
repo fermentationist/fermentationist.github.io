@@ -1,27 +1,23 @@
 self.__precacheManifest = [
   {
-    "revision": "7e9886b70c567242be3e",
+    "revision": "12cf3e3e6fdf837422a5",
     "url": "/static/css/main.254f9a46.chunk.css"
   },
   {
-    "revision": "7e9886b70c567242be3e",
-    "url": "/static/js/main.f3750e1c.chunk.js"
+    "revision": "12cf3e3e6fdf837422a5",
+    "url": "/static/js/main.962aa9da.chunk.js"
   },
   {
     "revision": "42ac5946195a7306e2a5",
     "url": "/static/js/runtime~main.a8a9905a.js"
   },
   {
-    "revision": "2d7ef70aa9441636a927",
-    "url": "/static/js/2.ab2d2ce2.chunk.js"
+    "revision": "9f712807fb6529db32cd",
+    "url": "/static/js/2.f9ff4546.chunk.js"
   },
   {
     "revision": "ee883d3a32bb05f856d5f39631aa626f",
     "url": "/static/media/hideout.ee883d3a.svg"
-  },
-  {
-    "revision": "d41813002e74de7792cc0dcebae9ae2d",
-    "url": "/static/media/skin_side_up_transparent.d4181300.png"
   },
   {
     "revision": "00b22e9ea40e3b3fb5a02ea48f4e7961",
@@ -30,10 +26,6 @@ self.__precacheManifest = [
   {
     "revision": "01430b01ebefe6f20a8529dd4b5de79e",
     "url": "/static/media/graph-paper.01430b01.svg"
-  },
-  {
-    "revision": "47f8a6f9be318a490f66e8cbf6b6c178",
-    "url": "/static/media/perforated_white_leather_@2X.47f8a6f9.png"
   },
   {
     "revision": "7870a283a376489ff1f12c8e9b2a26a7",
@@ -56,7 +48,7 @@ self.__precacheManifest = [
     "url": "/static/media/pixel-dennis-long-eyebrow.ce115670.gif"
   },
   {
-    "revision": "27bdcf9b4f030fa33dec52c74a2b11da",
+    "revision": "65159f447d327398b12522d2282846e2",
     "url": "/index.html"
   }
 ];
