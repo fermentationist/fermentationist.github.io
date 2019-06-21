@@ -1,19 +1,19 @@
 self.__precacheManifest = [
   {
-    "revision": "ddc48a0445de962e32db",
+    "revision": "6b770605cdd6575e64fc",
     "url": "/static/css/main.ee46faf7.chunk.css"
   },
   {
-    "revision": "ddc48a0445de962e32db",
-    "url": "/static/js/main.8dcd1495.chunk.js"
+    "revision": "6b770605cdd6575e64fc",
+    "url": "/static/js/main.1de5ab61.chunk.js"
   },
   {
     "revision": "42ac5946195a7306e2a5",
     "url": "/static/js/runtime~main.a8a9905a.js"
   },
   {
-    "revision": "9f712807fb6529db32cd",
-    "url": "/static/js/2.f9ff4546.chunk.js"
+    "revision": "843eb23fcbcd0ca4048e",
+    "url": "/static/js/2.105a1830.chunk.js"
   },
   {
     "revision": "ee883d3a32bb05f856d5f39631aa626f",
@@ -32,6 +32,26 @@ self.__precacheManifest = [
     "url": "/static/media/white_leather_@2X.7870a283.png"
   },
   {
+    "revision": "39aae4a61263e4ec15bbd956a07201f0",
+    "url": "/static/media/urnwood_dark_large.39aae4a6.jpg"
+  },
+  {
+    "revision": "a1393dad5b344fcc79492328c2c463b9",
+    "url": "/static/media/urnwood_light_large.a1393dad.jpg"
+  },
+  {
+    "revision": "4d10352423ba981474a67fc54e2cd78d",
+    "url": "/static/media/urnwood_dark_cropped_small.4d103524.jpg"
+  },
+  {
+    "revision": "0f5898c9398d75623e36a673c9b1e617",
+    "url": "/static/media/urnwood_light_cropped_small.0f5898c9.jpg"
+  },
+  {
+    "revision": "0e37185ae74c993c6f5dd00f0b0a498b",
+    "url": "/static/media/gray_kraft.0e37185a.jpg"
+  },
+  {
     "revision": "3ce3b93b031c5cd29bdec04abf618352",
     "url": "/static/media/pixel-dennis-dim-long.3ce3b93b.gif"
   },
@@ -48,7 +68,7 @@ self.__precacheManifest = [
     "url": "/static/media/pixel-dennis-long-eyebrow.ce115670.gif"
   },
   {
-    "revision": "3edb10c5831b3143b86f16341017a6b8",
+    "revision": "c0b251cb3040664d7b3f10c8d248a6d5",
     "url": "/index.html"
   }
 ];
