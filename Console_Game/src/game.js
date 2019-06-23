@@ -4,14 +4,14 @@ import mapKeyModule from "./mapkey.js";
 import itemModule from "./items.js";
 import commandsList from "./commands.js";
 import customConsole from "./console_styles.js";
-import {randomDogName} from "./dogNames.js";
+import {randomDogName} from "./dogNames.js"
 
 // consoleGame.state object stores player position, inventory, number of turns, history of player actions, and some methods to update the object's values.
 //todo: rewrite with generators?
 const ConsoleGame = {
 	maps: [...maps],
 	key: {...mapKeyModule(this)},
-	timeLimit: 360,
+	timeLimit: 250,
 	// weightLimit: 20,
 	state: {
 		objectMode : false,
@@ -21,14 +21,10 @@ const ConsoleGame = {
 		confirmMode: false,
 		solveMode: false,
 		abortMode: false,
-		grueMode: false,
-		repellantMode: false,
 		verbose: false,
 		inventory: [],
 		history: [],
 		turn: null,
-		score: 0,
-		maxScore: null,
 		pendingAction: null,
 		gameOver: false,
 		startPosition: {
@@ -42,7 +38,6 @@ const ConsoleGame = {
 			x: 7
 		},
 		dogName: randomDogName(),
-
 		get currentCellCode (){ 
 			return ConsoleGame.maps[this.position.z][this.position.y][this.position.x]
 		},
@@ -55,9 +50,6 @@ const ConsoleGame = {
 		get combinedEnv () {
 			return Object.values(this.env).flat();
 		},
-		get lightSources() {
-			return Object.values(ConsoleGame.items).filter(it => it.proto === "_matchbook" || it.name === "matchbook").filter(item => item.activated);
-		},
 	},
 	get mapKey (){
 		return this.key;
@@ -65,13 +57,16 @@ const ConsoleGame = {
 	set mapKey (value) {
 		this.key = value;
 	},
-	
+	get lightSources() {
+		return Object.values(this.items).filter(it => it.proto === "_matchbook" || it.name === "matchbook");
+	},
 	exemptCommands: ["help", "start", "commands", "inventory", "inventorytable", "look", "font", "color", "size", "save", "restore", "resume", "verbose", "_save_slot", "yes", "_0", "_1", "_2", "_3", "_4", "_5", "_6", "_7", "_8", "_9"],
 	   
 	  //=========================================\\
 	turnDemon: function (commandName, interpreterFunction) {
     // This function runs at the start of each turn\\
 		if (this.state.gameOver) {
+			console.log(commandName)
 			return console.codeInline(["[Game over. Please type ", "start ", "to begin a new game.]"]);
 		}
 		try {
@@ -137,18 +132,14 @@ const ConsoleGame = {
 		this.state.confirmMode = false;
 		this.state.solveMode = false;
 		this.state.abortMode = false;
-		this.state.grueMode = false;
-		this.state.repellantMode = false; 
 		this.state.verbose = false;
 		this.state.inventory = [];
 		this.state.history = [];
 		this.state.turn = 0;
-		this.state.score = 0;
-		this.state.maxScore = Object.values(this.items).filter(item => item.takeable || item.openable).reduce((accum, item) => accum += item.points, 0);
 		this.state.gameOver = false;
 		this.state.pendingAction = null;
 		this.state.position = this.state.startPosition;
-		this.state.dogName = randomDogName();
+		// this.state.dogName = randomDogName(); removed because this was causing inconsistent random dog name
 		window.localStorage.removeItem("ConsoleGame.history");
 		return;
 	},
@@ -197,9 +188,6 @@ const ConsoleGame = {
 
 	describeSurroundings: function (){// function puts together various parts of game description, and outputs it as a single string
 		const description = this.state.currentMapCell.description;
-		if (this.state.gameOver){
-			return;
-		}
 		const itemStr = this.itemsInEnvironment() ? `You see ${this.itemsInEnvironment()} here.` : "";
 		const nestedItemStr = this.nestedItemString(); 
 		const moveOptions = `You can go ${this.movementOptions()}.`;
@@ -256,11 +244,13 @@ const ConsoleGame = {
 	// returns a list of items available in the environment that are nested inside other objects, as a formatted string
 	nestedItemString: function () {
 		const openContainers = this.state.currentMapCell.openContainers;
+        console.log("TCL: openContainers", openContainers)
         
 		const containedItems = openContainers.map(obj => {
+            console.log("TCL: obj", obj)
 			const name = `${obj.article} ${obj.name}`;// the name of the container
 			const objectNames = obj.contents.map(item => `${item.article} ${item.name}`);// array of names of the objects inside the container (with articles)
-			return [name, this.formatList(objectNames)];// returns an object with a single property, the name of the container, 
+			return [name, this.formatList(objectNames)];
 		});
         
 		const containedString = containedItems.map(container => {
@@ -309,31 +299,16 @@ const ConsoleGame = {
 			this.mapKey[this.items._door.closedTarget].closed = true;
 		}
 		if (this.state.turn >= this.timeLimit && ! this.state.gameOver) {
-			return this.dead(`\n\"You are taking too long and I am getting bored. I'm afraid I'll have to find a new player.\"\n\nYou are startled by the sudden reappearance your truant host and captor. You catch hardly a glimpse of your assailant before the blow that will knock you unconscious connects with the back of your skull. Good night.`);
+			return this.dead("You don't feel so well. It never occurs to you, as you crumple to the ground, losing consciousness for the final time, that you have been poisoned by an odorless, invisible, yet highly toxic gas.");
 		}
-		this.state.lightSources.forEach(source => {
-			source.decrementCounter()
-		});
-		if (this.state.repellantMode){
-			Object.values(this.items).filter(item => item.name === "grue_repellant").map(repellant => repellant.decrementCounter());
-		}
-		const grue = !this.state.repellantMode && this.inEnvironment("grue");
-		if (grue) {
-			if (this.state.grueMode){
-				grue.lurk();
-			}
-			this.state.grueMode = true;
-			return;
-		} 
-		this.state.grueMode = false;
+		this.lightSources.forEach(source => source.decrementCounter());
 	},
 	dead: function (text) {
 		console.p(text);
-		console.p("\n****You have died**** \nOf course, being dead, you are unaware of this unfortunate turn of events. In fact, you are no longer aware of anything at all.");
-		console.p(`You scored ${this.state.score} of a possible ${this.state.maxScore} points, in ${this.state.turn} moves.`);
+		console.p("You have died. Of course, being dead, you are unaware of this unfortunate turn of events. In fact, you are no longer aware of anything at all.");
 		window.localStorage.removeItem("ConsoleGame.history");
 		this.state.gameOver = true;
-		console.codeInline(["[Game over. Please type ", "start ", "to begin a new game, or", " restore", ", to load a previously saved game.]"]);
+		console.codeInline(["[Game over. Please type ", "start ", "to begin a new game.]"]);
 	},
 	captured: function () {
 		console.p("As you step out onto the front porch, you struggle to see in the bright midday sun, your eyes having adjusted to the dimly lit interior of the house. You hear a surprised voice say, \"Hey! How did you get out here?!\" You spin around to see the source of the voice, but something blunt and heavy has other plans for you and your still aching skull. You descend back into the darkness of sleep.");
@@ -353,11 +328,9 @@ const ConsoleGame = {
 			console.p(text);
 		}
 		console.win("You win!! Congratulations and thanks for playing!");
-		console.p(! this.inInventory("dog") ? `It is too bad you didn't manage to rescue ${this.state.dogName}. At least you escaped with your life...`: `And you rescued your dog, ${this.state.dogName}!!`);
-		console.p(`You scored ${this.state.score} of a possible ${this.state.maxScore} points, in ${this.state.turn} moves.`);
 		window.localStorage.removeItem("ConsoleGame.history");
 		this.state.gameOver = true;
-		console.codeInline(["[Game over. Please type ", "start ", "to begin a new game, or", " restore", ", to load a previously saved game.]"]);
+		console.codeInline(["[Game over. Please type ", "start ", "to begin a new game.]"]);
 	},
 	_restore: function (command) {
 		let keys = Object.keys(localStorage);
@@ -580,7 +553,7 @@ const ConsoleGame = {
 		return options;
 	}, 
 	preface: function () {
-		console.p("You slowly open your eyes. Your eyelids aren't halfway open before the throbbing pain in your head asserts itself. The last thing you can remember is taking your dog for a walk after work, but you certainly don't remember being here before.");
+		console.p("You slowly open your eyes. Your eyelids aren't halfway open before the throbbing pain in your head asserts itself. The last thing you can remember is taking your dog for a walk. Your current surroundings look entirely unfamiliar.");
 	},
 	stockDungeon: function (subEnvName){
 		Object.keys(this.mapKey).map((key) => {
@@ -602,25 +575,17 @@ const ConsoleGame = {
 	},
 
 	initializeNewGame: function () {
-		//reset game state
 		this.resetGame();
-
-		// this is to register the randomly generated dogName as a command
-		const [itemFn] = this.commands.filter(cmd => cmd[0].name === "_items")[0];
-		const dogCmd = [itemFn, this.cases("dog", this.state.dogName)];
-		this.initCommands([dogCmd]);
-
-		// register all other commands
 		this.initCommands(this.commands);
-
-		// stock items in environment and inventory
 		this.stockDungeon("hiddenEnv");
 		this.stockDungeon("visibleEnv");
 		this.items._glove.contents.push(this.items._matchbook);
 		this.items._safe.contents.push(this.items._key, this.items._scroll);
-		this.items._drawer.contents.push(this.items._disc);
-		this.items._wardrobe.contents.push(this.items._film);
-		this.items._dresser_drawer.contents.push(this.items._old_key);
+		this.items._drawer.contents.push(this.items._film);
+        console.log("TCL: this.items:", this.items)
+		this.items._nightstand_drawer.contents.push(this.items._old_key);
+		this.items._wardrobe.contents.push(this.items._grue_repellant);
+		this.items._dresser_drawer.contents.push(this.items._booklet);
 		this.addToInventory([this.items._no_tea]);
 	
 	},
@@ -686,7 +651,7 @@ const ConsoleGame = {
 		console.table(commandTable);
 	},
 	setValue: function (value) {
-		return this.state.solveMode ? this.solveCode(value) : this.state.prefMode ? this.setPreference(value) : console.invalid("setValue (_) called out of context.");
+		return this.state.solveMode ? this.solveCode(value) : this.state.prefMode ? this.setPreference(value) : console.invalid("setValue _() called out of context.");
 	}
 }
 
