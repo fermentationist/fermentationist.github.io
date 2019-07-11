@@ -5,6 +5,7 @@ import itemModule from "./items.js";
 import commandsList from "./commands.js";
 import customConsole from "./console_styles.js";
 import {randomDogName} from "./dogNames.js"
+import firestoreLog from "./firestoreLog.js";
 
 // consoleGame.state object stores player position, inventory, number of turns, history of player actions, and some methods to update the object's values.
 //todo: rewrite with generators?
@@ -68,6 +69,14 @@ const ConsoleGame = {
 		if (this.state.gameOver) {
 			console.log(commandName)
 			return console.codeInline(["[Game over. Please type ", "start ", "to begin a new game.]"]);
+		}
+		if (window.CONSOLE_GAME_DEBUG) {
+			window.debugLog.push({userInput: commandName});
+			if (this.firestoreGameRef){
+				this.firestoreGameRef.update({
+					gameLog: window.debugLog
+				});
+			}
 		}
 		try {
 			let dontCountTurn = this.exemptCommands.includes(commandName);
@@ -428,7 +437,7 @@ const ConsoleGame = {
 
 	// Applies bindCommandToFunction() to an array of all of the commands to be created.
 	initCommands: function (commandsArray){
-		commandsArray.map((commandLog) => {
+		commandsArray.map(commandLog => {
 			let [interpreterFunction, aliases] = commandLog;
 			this.bindCommandToFunction(interpreterFunction, aliases);
 		});
@@ -574,6 +583,12 @@ const ConsoleGame = {
 	},
 
 	initializeNewGame: function () {
+		if (window.CONSOLE_GAME_DEBUG) {
+			firestoreLog().then(response => {
+			this.firestoreGameID = response.id;
+			this.firestoreGameRef = response;
+			});
+		}
 		this.resetGame();
 		this.initCommands(this.commands);
 		this.stockDungeon("hiddenEnv");

@@ -1,19 +1,19 @@
 self.__precacheManifest = [
   {
-    "revision": "f3f6d62fca352a4235aa",
+    "revision": "96a90c034afdec568f81",
     "url": "/static/css/main.ee46faf7.chunk.css"
   },
   {
-    "revision": "f3f6d62fca352a4235aa",
-    "url": "/static/js/main.3a33860c.chunk.js"
+    "revision": "96a90c034afdec568f81",
+    "url": "/static/js/main.56e02ebb.chunk.js"
   },
   {
     "revision": "42ac5946195a7306e2a5",
     "url": "/static/js/runtime~main.a8a9905a.js"
   },
   {
-    "revision": "843eb23fcbcd0ca4048e",
-    "url": "/static/js/2.105a1830.chunk.js"
+    "revision": "b446c0a4c5bb64f81f63",
+    "url": "/static/js/2.5553cb75.chunk.js"
   },
   {
     "revision": "ee883d3a32bb05f856d5f39631aa626f",
@@ -22,14 +22,6 @@ self.__precacheManifest = [
   {
     "revision": "00b22e9ea40e3b3fb5a02ea48f4e7961",
     "url": "/static/media/seigaiha.00b22e9e.png"
-  },
-  {
-    "revision": "01430b01ebefe6f20a8529dd4b5de79e",
-    "url": "/static/media/graph-paper.01430b01.svg"
-  },
-  {
-    "revision": "7870a283a376489ff1f12c8e9b2a26a7",
-    "url": "/static/media/white_leather_@2X.7870a283.png"
   },
   {
     "revision": "39aae4a61263e4ec15bbd956a07201f0",
@@ -68,7 +60,7 @@ self.__precacheManifest = [
     "url": "/static/media/pixel-dennis-long-eyebrow.ce115670.gif"
   },
   {
-    "revision": "4b581c9773eb05bfcbb6c6d21b4b9885",
+    "revision": "fcbe2ca34c010b1318ebd55b39fd7de8",
     "url": "/index.html"
   }
 ];

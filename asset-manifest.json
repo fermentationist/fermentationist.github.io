@@ -1,16 +1,15 @@
 {
   "main.css": "/static/css/main.ee46faf7.chunk.css",
-  "main.js": "/static/js/main.3a33860c.chunk.js",
-  "main.js.map": "/static/js/main.3a33860c.chunk.js.map",
+  "main.js": "/static/js/main.56e02ebb.chunk.js",
+  "main.js.map": "/static/js/main.56e02ebb.chunk.js.map",
   "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
   "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-  "static/js/2.105a1830.chunk.js": "/static/js/2.105a1830.chunk.js",
-  "static/js/2.105a1830.chunk.js.map": "/static/js/2.105a1830.chunk.js.map",
+  "static/js/2.5553cb75.chunk.js": "/static/js/2.5553cb75.chunk.js",
+  "static/js/2.5553cb75.chunk.js.map": "/static/js/2.5553cb75.chunk.js.map",
   "index.html": "/index.html",
-  "precache-manifest.993ca147bba9a538e4e22e7532d0d270.js": "/precache-manifest.993ca147bba9a538e4e22e7532d0d270.js",
+  "precache-manifest.91b56f50a3eec07cffc4c507c09e7e88.js": "/precache-manifest.91b56f50a3eec07cffc4c507c09e7e88.js",
   "service-worker.js": "/service-worker.js",
   "static/css/main.ee46faf7.chunk.css.map": "/static/css/main.ee46faf7.chunk.css.map",
-  "static/media/graph-paper.svg": "/static/media/graph-paper.01430b01.svg",
   "static/media/gray_kraft.jpg": "/static/media/gray_kraft.0e37185a.jpg",
   "static/media/hideout.svg": "/static/media/hideout.ee883d3a.svg",
   "static/media/pixel-dennis-dim-long-eyebrow.gif": "/static/media/pixel-dennis-dim-long-eyebrow.25ded716.gif",
@@ -21,6 +20,5 @@
   "static/media/urnwood_dark_cropped_small.jpg": "/static/media/urnwood_dark_cropped_small.4d103524.jpg",
   "static/media/urnwood_dark_large.jpg": "/static/media/urnwood_dark_large.39aae4a6.jpg",
   "static/media/urnwood_light_cropped_small.jpg": "/static/media/urnwood_light_cropped_small.0f5898c9.jpg",
-  "static/media/urnwood_light_large.jpg": "/static/media/urnwood_light_large.a1393dad.jpg",
-  "static/media/white_leather_@2X.png": "/static/media/white_leather_@2X.7870a283.png"
+  "static/media/urnwood_light_large.jpg": "/static/media/urnwood_light_large.a1393dad.jpg"
 }
