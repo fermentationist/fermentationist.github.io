@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "b475987a854e3933a520",
+    "revision": "a236716272c345294e95",
     "url": "/static/css/main.ee46faf7.chunk.css"
   },
   {
-    "revision": "b475987a854e3933a520",
-    "url": "/static/js/main.f15170c1.chunk.js"
+    "revision": "a236716272c345294e95",
+    "url": "/static/js/main.b02df704.chunk.js"
   },
   {
     "revision": "42ac5946195a7306e2a5",
@@ -36,8 +36,8 @@ self.__precacheManifest = [
     "url": "/static/media/urnwood_light_cropped_small.c6a2e278.jpg"
   },
   {
-    "revision": "68e69ed79656b0938b51a72974565ef6",
-    "url": "/static/media/gray_kraft.68e69ed7.webp"
+    "revision": "0e37185ae74c993c6f5dd00f0b0a498b",
+    "url": "/static/media/gray_kraft.0e37185a.jpg"
   },
   {
     "revision": "3ce3b93b031c5cd29bdec04abf618352",
@@ -56,7 +56,7 @@ self.__precacheManifest = [
     "url": "/static/media/pixel-dennis-long-eyebrow.ce115670.gif"
   },
   {
-    "revision": "c3962e8f89e785fbc856721a1c9349a3",
+    "revision": "07bfdb99d0e167ee5ad7379aa318a885",
     "url": "/index.html"
   }
 ];
