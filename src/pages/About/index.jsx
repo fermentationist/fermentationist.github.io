@@ -14,7 +14,7 @@ const About = props => {
   return (
     <Page>
       <P>
-      "I am a full stack software engineer with an inquisitive mind and a commitment to craftsmanship. I have over three years of experience as a JavaScript developer, but I'm open to learning new languages and tech stacks, and I welcome the opportunity to expand my knowledge. As an artist, I have an aptitude for learning and applying new skillsets extemporaneously, and a knack for viewing problems from unexpected angles. I love to MAKE things, with code, or otherwise."
+      "I am a full stack software engineer with an inquisitive mind and a commitment to craftsmanship. I have more than three years of experience as a JavaScript developer, but I am always open to learning something new. As an artist, I have an aptitude for acquiring and applying new skillsets extemporaneously, and a knack for viewing problems from unexpected angles. I love to MAKE things, with code, or otherwise."
       </P>
     </Page>
   );

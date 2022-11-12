@@ -47,7 +47,7 @@ const Contact = props => {
         <UnorderedList className="contact-links">
 					<ListItem>
 						<a href="mailto:dennis.m.hodges@gmail.com" target="_blank" aria-label="Contact me by email">
-							<LinkIcon icon="email" viewBox="-7 0 45 25"/>
+							<LinkIcon icon="email" viewBox="-6 0 45 25"/>
 						</a>
 					</ListItem>
           <ListItem>

@@ -15,6 +15,7 @@ const Container = styled.div`
 `;
 
 const H1 = styled.h1`
+  margin-top: 2em;
   text-align: center;
   width: 100vw;
   font-size: 10vw;
