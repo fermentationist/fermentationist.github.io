@@ -206,8 +206,8 @@ Error generating stack: `+c.message+`
 	margin: 25px;
 	padding: 25px;
 	border-radius: 1em;
-	background-image: url("gray_kraft.webp");
-	filter: invert();
+	background-image: url("gray_kraft_2.webp");
+	filter: invert(0.85);
 	font-family: inherit;
 	color: black;
 	width: max(300px, 38vw);
