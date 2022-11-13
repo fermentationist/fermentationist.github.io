@@ -93,7 +93,7 @@ Error generating stack: `+c.message+`
   }
 `,mo=_1(Cn)`
   min-height: 48px;
-`,vo=e=>{const n=G3().pathname,l=[{name:"Home",path:["/","/home"]},{name:"About",path:["/about"]},{name:"Projects",path:["/projects"]},{name:"Contact",path:["/contact"]}];return L("nav",{children:l.map((r,c)=>r.path.includes(n)?null:L0("span",{children:[L(re,{children:L(mo,{to:r.path[0],children:r.name})}),c!==l.length-1?L(re,{children:"|"}):null]},`nav-link-${c}`))})},yo=_1.div`
+`,vo=e=>{const n=G3().pathname,r=[{name:"Home",path:["/","/home"]},{name:"About",path:["/about"]},{name:"Projects",path:["/projects"]},{name:"Contact",path:["/contact"]}].filter(c=>!c.path.includes(n));return L("nav",{children:r.map((c,a)=>L0("span",{children:[L(re,{children:L(mo,{to:c.path[0],children:c.name})}),a!==r.length-1?L(re,{children:"|"}):null]},`nav-link-${a}`))})},yo=_1.div`
   display: flex;
   flex-direction: column;
   place-items: center;
