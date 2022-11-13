@@ -15,7 +15,7 @@ const projects = [
 				linkUrl: "https://github.com/fermentationist/ConsoleGame.git"
 			}
 		],
-		description: "As a fan of old Infocom interactive fiction games, I thought it would be fun to hide a text adventure in the browser's console. Open the JavaScript console in your browser's developer tools to check it out! (command-option-i on Mac, control-shift-i on Windows or Linux) ",
+		description: "As a fan of old Infocom interactive fiction games, I thought it would be fun to hide a text adventure in the browser's console. Open the JavaScript console in your browser's developer tools to check it out!",
 		devIcons: ["javascript", "webpack"],
 	},
 	{
