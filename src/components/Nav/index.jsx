@@ -1,6 +1,5 @@
-import {Link, useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
-
 
 const H3 = styled.h3`
   height: 48px;
@@ -17,48 +16,43 @@ const StyledLink = styled(Link)`
   min-height: 48px;
 `;
 
-const Nav = props => {
+const Nav = (props) => {
   const location = useLocation();
   const pathname = location.pathname;
   const links = [
     {
       name: "Home",
-      path: ["/", "/home"]
+      path: ["/", "/home"],
     },
     {
       name: "About",
-      path: ["/about"]
+      path: ["/about"],
     },
     {
       name: "Projects",
-      path: ["/projects"]
+      path: ["/projects"],
     },
     {
       name: "Contact",
-      path: ["/contact"]
-    }
-  ]
+      path: ["/contact"],
+    },
+  ];
+  const filteredLinks = links.filter((link) => !link.path.includes(pathname));
   return (
     <nav>
-      {
-        links.map((link, index) => {
-          if (link.path.includes(pathname)) {
-            return null;
-          }
+      {filteredLinks
+        .map((link, index) => {
           return (
             <span key={`nav-link-${index}`}>
-              <H3><StyledLink to={link.path[0]}>{link.name}</StyledLink></H3>
-              {
-                index !== links.length - 1 ? (
-                  <H3>|</H3>
-                ) : null
-              }
+              <H3>
+                <StyledLink to={link.path[0]}>{link.name}</StyledLink>
+              </H3>
+              {index !== filteredLinks.length - 1 ? <H3>|</H3> : null}
             </span>
-          )
-        })
-      }
+          );
+        })}
     </nav>
-  )
-}
+  );
+};
 
 export default Nav;
