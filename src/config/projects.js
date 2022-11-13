@@ -55,7 +55,7 @@ const projects = [
 				linkUrl: "https://github.com/fermentationist/devicon-react-svg"
 			}
 		],
-		description: "My second npm package - a React component that renders the Devicons library of technology icons as inline SVG elements. (In use on this site!)",
+		description: "A React component that renders the Devicons library of technology icons as inline SVG elements. (In use on this site!)",
 		devIcons: ["react", "npm", "rollup"],
 	}, 
 	{
@@ -92,7 +92,7 @@ const projects = [
 				linkUrl: "https://github.com/fermentationist/Papyracy"
 			}
 		],
-		description: "My first Chrome extension, made for didactic purposes, mostly. \nPapyracy leverages the fontastic power of Papyrus to quickly render any webpage nearly unreadable! Simply click the icon and all of the text will be Papyrus-ified!",
+		description: "My first Chrome extension. \nPapyracy leverages the fontastic power of Papyrus to quickly render any webpage nearly unreadable! Simply click the icon and all of the text will be Papyrus-ified!",
 		devIcons: ["javascript", "html5", "css3", "chrome"]
 	},
 	{
