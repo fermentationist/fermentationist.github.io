@@ -56,7 +56,7 @@ const projects = [
 			}
 		],
 		description: "My second npm package - a React component that renders the Devicons library of technology icons as inline SVG elements. (In use on this site!)",
-		devIcons: ["nodejs_small", "npm", "rollup"],
+		devIcons: ["react", "npm", "rollup"],
 	}, 
 	{
 		title: "slenderman",
