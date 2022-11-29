@@ -1,5 +1,23 @@
 const projects = [
 	{
+		title: "Wordle Assistant",
+		imageUrl: null,
+		titleLinkUrl: "https://dennis-hodges.com/wordle-assistant/",
+		links: [
+			{
+				linkTitle: "• Wordle Assistant - demo",
+				linkUrl: "https://dennis-hodges.com/wordle-assistant/"
+			},
+			{
+				linkTitle: "• repo available on Github",
+				linkIcon: "github_full",
+				linkUrl: "https://github.com/fermentationist/wordle-assistant"
+			}
+		],
+		description: "A React application that helps the user solve Wordle puzzles. The user enters the feedback (colors) from each Wordle guess, in order to see a filtered list of all remaining words.",
+		devIcons: ["javascript", "html5", "css3", "react"],
+	},
+	{
 		title: "ConsoleGame",
 		imageUrl: null,
 		titleLinkUrl: "https://github.com/fermentationist/ConsoleGame.git",
