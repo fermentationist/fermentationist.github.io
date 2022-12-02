@@ -11,7 +11,7 @@ const ClientRouter = props => {
       <Route path="/projects" element={<Projects />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/home" element={<Home />} />
-      <Route path="/" element={<Home />} />
+      <Route path="*" element={<Home />} />
     </Routes>
   )
 }
