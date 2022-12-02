@@ -97,6 +97,7 @@ Error generating stack: `+c.message+`
   display: flex;
   flex-direction: column;
   place-items: center;
+  min-width: fit-content;
   min-height: 100vh;
   height: auto;
   width: 100vw;
@@ -213,7 +214,7 @@ Error generating stack: `+c.message+`
 	width: max(300px, 38vw);
 	text-align: left;
 	@media screen and (min-width: 600px) {
-		width: min(800px, 38vw);
+		width: min(800px, 50vw);
 	}
 
 	.project-title {
