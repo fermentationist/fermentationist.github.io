@@ -1,4 +1,3 @@
-import React, {Component} from "react";
 import styled from "styled-components";
 import DevIcon from "devicon-react-svg";
 import withTooltip from "../../hoc/withTooltip";
@@ -19,7 +18,7 @@ const StyledCard = styled.div`
 	width: max(300px, 38vw);
 	text-align: left;
 	@media screen and (min-width: 600px) {
-		width: min(800px, 38vw);
+		width: min(800px, 50vw);
 	}
 
 	.project-title {
