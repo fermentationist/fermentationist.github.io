@@ -97,7 +97,6 @@ Error generating stack: `+c.message+`
   display: flex;
   flex-direction: column;
   place-items: center;
-  min-width: fit-content;
   min-height: 100vh;
   height: auto;
   width: 100vw;
