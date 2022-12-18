@@ -1,7 +1,7 @@
 const projects = [
 	{
 		title: "Wordle Assistant",
-		imageUrl: null,
+		imageUrl: "https://dennis-hodges.com/wordle-assistant/icons/android-icon-48x48.png",
 		titleLinkUrl: "https://dennis-hodges.com/wordle-assistant/",
 		links: [
 			{
@@ -9,13 +9,31 @@ const projects = [
 				linkUrl: "https://dennis-hodges.com/wordle-assistant/"
 			},
 			{
-				linkTitle: "• repo available on Github",
+				linkTitle: "• repo available on",
 				linkIcon: "github_full",
 				linkUrl: "https://github.com/fermentationist/wordle-assistant"
 			}
 		],
 		description: "A Progressive Web Application (PWA), built with React, that helps the user solve Wordle puzzles. The user enters the feedback (colors) from each Wordle guess, in order to see a filtered list of all remaining words.",
-		devIcons: ["javascript", "html5", "css3", "react"],
+		devIcons: ["html5", "css3", "react"],
+	},
+	{
+		title: "Hot Dog-ma",
+		imageUrl: "https://hotdogisasandwich.com/icons/hotdog_64x64.png",
+		titleLinkUrl: "https://hotdogisasandwich.com/",
+		links: [
+			{
+				linkTitle: "• Hot Dog-ma - demo (https://hotdogisasandwich.com)",
+				linkUrl: "https://hotdogisasandwich.com/"
+			},
+			{
+				linkTitle: "• repo available on",
+				linkIcon: "github_full",
+				linkUrl: "https://github.com/fermentationist/hot-dog-ma.git"
+			}
+		],
+		description: "A full stack React application that uses the OpenAI ChatGPT API to generate unique \"prayers\", based on a subject of the user's choosing. Disclaimer: Generated prayers may contain strong opinions about sandwich taxonomy.",
+		devIcons: ["html5", "css3", "react", "nodejs_small", "OpenAI"],
 	},
 	{
 		title: "ConsoleGame",
@@ -123,7 +141,7 @@ const projects = [
 	// 			linkUrl: "https://fierce-beach-30371.herokuapp.com/"
 	// 		},
 	// 		{
-	// 			linkTitle: "• repo available on Github",
+	// 			linkTitle: "• repo available on",
 	// 			linkIcon: "github_full",
 	// 			linkUrl: "https://github.com/fermentationist/burger"
 	// 		}

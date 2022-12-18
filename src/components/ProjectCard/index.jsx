@@ -28,6 +28,8 @@ const StyledCard = styled.div`
 	}
 
 	.project-image {
+		filter: invert(1.15);
+		margin-bottom: 1em;
 		display: block;
 	}
 
@@ -110,7 +112,7 @@ const ProjectCard = props => {
 			<LinkIcon icon={link.linkIcon} />
 		) : null;
 		const aLink = link.linkUrl ? (
-			<a href={link.linkUrl}>
+			<a href={link.linkUrl} target="_blank">
 				{linkIcon}
 				<span className="link-caption">
 					{link.linkTitle}
@@ -127,7 +129,7 @@ const ProjectCard = props => {
 	});
 	return (
 		<StyledCard className={`project-card project-${props.title}`}>
-			<a href={props.titleLinkUrl}>
+			<a href={props.titleLinkUrl} target="_blank">
 				<h2 className="project-title">{props.title}</h2>
 			</a>
 			{props.imageUrl ? 
