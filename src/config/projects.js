@@ -18,23 +18,6 @@ const projects = [
 		devIcons: ["html5", "css3", "react"],
 	},
 	{
-		title: "Urly URL Shortener",
-		titleLinkUrl: "https://dennis-hodges.com/wordle-assistant/",
-		links: [
-			{
-				linkTitle: "• Urly URL Shortener- demo",
-				linkUrl: "https://urly.onrender.com"
-			},
-			{
-				linkTitle: "• repo available on",
-				linkIcon: "github_full",
-				linkUrl: "https://github.com/fermentationist/urly"
-			}
-		],
-		description: "A full stack URL shortener that uses a SQLite database with an Express server and a React front end.",
-		devIcons: ["html5", "css3", "react", "nodejs_small", "SQLite"],
-	},
-	{
 		title: "Hot Dog-ma",
 		imageUrl: "https://hotdogisasandwich.com/icons/hotdog_64x64.png",
 		titleLinkUrl: "https://hotdogisasandwich.com/",
@@ -51,6 +34,36 @@ const projects = [
 		],
 		description: "A full stack React application that uses the OpenAI ChatGPT API to generate unique \"prayers\", based on a subject of the user's choosing. Disclaimer: Generated prayers may contain strong opinions about sandwich taxonomy.",
 		devIcons: ["html5", "css3", "react", "nodejs_small", "OpenAI"],
+	},
+	{
+		title: "Urly URL Shortener (full stack)",
+		titleLinkUrl: "https://urly.onrender.com",
+		links: [
+			{
+				linkTitle: "• Urly URL Shortener - demo",
+				linkUrl: "https://urly.onrender.com"
+			},
+			{
+				linkTitle: "• repo available on",
+				linkIcon: "github_full",
+				linkUrl: "https://github.com/fermentationist/urly"
+			},
+		],
+		description: "A full stack URL shortener that uses a SQLite database with an Express server and a React front end.",
+		devIcons: ["html5", "css3", "react", "nodejs_small", "SQLite"],
+	},
+	{
+		title: "Url-Py URL Shortener (back end only)",
+		titleLinkUrl: "https://github.com/fermentationist/urly",
+		links: [
+			{
+				linkTitle: "• repo available on",
+				linkIcon: "github_full",
+				linkUrl: "https://github.com/fermentationist/urly"
+			},
+		],
+		description: "An second implementation of the URL shortener's back end, this time in Python, using FastAPI",
+		devIcons: ["html5", "css3", "FastAPI", "python"],
 	},
 	{
 		title: "ConsoleGame",
