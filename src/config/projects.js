@@ -18,6 +18,23 @@ const projects = [
 		devIcons: ["html5", "css3", "react"],
 	},
 	{
+		title: "Urly URL Shortener",
+		titleLinkUrl: "https://dennis-hodges.com/wordle-assistant/",
+		links: [
+			{
+				linkTitle: "• Urly URL Shortener- demo",
+				linkUrl: "https://urly.onrender.com"
+			},
+			{
+				linkTitle: "• repo available on",
+				linkIcon: "github_full",
+				linkUrl: "https://github.com/fermentationist/urly"
+			}
+		],
+		description: "A full stack URL shortener that uses a SQLite database with an Express server and a React front end.",
+		devIcons: ["html5", "css3", "react", "nodejs_small", "SQLite"],
+	},
+	{
 		title: "Hot Dog-ma",
 		imageUrl: "https://hotdogisasandwich.com/icons/hotdog_64x64.png",
 		titleLinkUrl: "https://hotdogisasandwich.com/",
