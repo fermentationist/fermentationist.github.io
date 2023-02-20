@@ -63,7 +63,7 @@ const projects = [
 			},
 		],
 		description: "An second implementation of the URL shortener's back end, this time in Python, using FastAPI",
-		devIcons: ["html5", "css3", "FastAPI", "python"],
+		devIcons: ["FastAPI", "python", "SQLite"],
 	},
 	{
 		title: "ConsoleGame",
