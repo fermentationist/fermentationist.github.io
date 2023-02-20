@@ -54,16 +54,16 @@ const projects = [
 	},
 	{
 		title: "Url-Py URL Shortener (back end only)",
-		titleLinkUrl: "https://github.com/fermentationist/urly",
+		titleLinkUrl: "https://github.com/fermentationist/url-py",
 		links: [
 			{
 				linkTitle: "• repo available on",
 				linkIcon: "github_full",
-				linkUrl: "https://github.com/fermentationist/urly"
+				linkUrl: "https://github.com/fermentationist/url-py"
 			},
 		],
 		description: "An second implementation of the URL shortener's back end, this time in Python, using FastAPI",
-		devIcons: ["FastAPI", "python", "SQLite"],
+		devIcons: ["python", "FastAPI", "SQLite"],
 	},
 	{
 		title: "ConsoleGame",
