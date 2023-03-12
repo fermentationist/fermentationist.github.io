@@ -85,6 +85,19 @@ const projects = [
 		devIcons: ["javascript", "webpack"],
 	},
 	{
+		title: "Node Blog Post Generator",
+		titleLinkUrl: "https://github.com/fermentationist/node-blog-post-generator",
+		links: [
+			{
+				linkTitle: "• repo available on",
+				linkIcon: "github_full",
+				linkUrl: "https://github.com/fermentationist/node-blog-post-generator"
+			},
+		],
+		description: "A Node.js app that uses the OpenAI API to create blog posts and save them as markdown files. Can be used as a command line tool or imported as a module.",
+		devIcons: ["nodejs_small", "OpenAI"],
+	},
+	{
 		title: "woke-dyno",
 		imageUrl: null,
 		titleLinkUrl: "https://www.npmjs.com/package/woke-dyno",
@@ -106,42 +119,42 @@ const projects = [
 		description: "woke-dyno is an npm package to prevent your free Heroku dyno from sleeping.",
 		devIcons: ["nodejs_small", "npm", "jest"],
 	}, 
-	{
-		title: "devicon-react-svg",
-		imageUrl: null,
-		titleLinkUrl: "https://www.npmjs.com/package/devicon-react-svg",
-		links: [{
-				linkTitle: "• module available on",
-				linkIcon: "npm",
-				linkUrl: "https://www.npmjs.com/package/devicon-react-svg"
-			},
-			{
-				linkTitle: "• repo available on",
-				linkIcon: "github_full",
-				linkUrl: "https://github.com/fermentationist/devicon-react-svg"
-			}
-		],
-		description: "A React component that renders the Devicons library of technology icons as inline SVG elements. (In use on this site!)",
-		devIcons: ["react", "npm", "rollup"],
-	}, 
-	{
-		title: "slenderman",
-		imageUrl: null,
-		titleLinkUrl: "https://www.npmjs.com/package/slenderman",
-		links: [{
-				linkTitle: "• module available on",
-				linkIcon: "npm",
-				linkUrl: "https://www.npmjs.com/package/slenderman"
-			},
-			{
-				linkTitle: "• repo available on",
-				linkIcon: "github_full",
-				linkUrl: "https://github.com/fermentationist/slenderman"
-			},
-		],
-		description: "slenderman is a fast and easy way to create a basic Svelte app. With a single command, you will have a running app, that you can then take apart and reassemble as you wish. \nThe app is set up to use Webpack, with svelte-loader, to compile your code. Webpack-dev-server will start up automatically to serve your app, and watch your files for changes (hot reloading!).",
-		devIcons: ["nodejs_small", "npm", "svelte", "webpack"],
-	}, 
+	// {
+	// 	title: "devicon-react-svg",
+	// 	imageUrl: null,
+	// 	titleLinkUrl: "https://www.npmjs.com/package/devicon-react-svg",
+	// 	links: [{
+	// 			linkTitle: "• module available on",
+	// 			linkIcon: "npm",
+	// 			linkUrl: "https://www.npmjs.com/package/devicon-react-svg"
+	// 		},
+	// 		{
+	// 			linkTitle: "• repo available on",
+	// 			linkIcon: "github_full",
+	// 			linkUrl: "https://github.com/fermentationist/devicon-react-svg"
+	// 		}
+	// 	],
+	// 	description: "A React component that renders the Devicons library of technology icons as inline SVG elements. (In use on this site!)",
+	// 	devIcons: ["react", "npm", "rollup"],
+	// }, 
+	// {
+	// 	title: "slenderman",
+	// 	imageUrl: null,
+	// 	titleLinkUrl: "https://www.npmjs.com/package/slenderman",
+	// 	links: [{
+	// 			linkTitle: "• module available on",
+	// 			linkIcon: "npm",
+	// 			linkUrl: "https://www.npmjs.com/package/slenderman"
+	// 		},
+	// 		{
+	// 			linkTitle: "• repo available on",
+	// 			linkIcon: "github_full",
+	// 			linkUrl: "https://github.com/fermentationist/slenderman"
+	// 		},
+	// 	],
+	// 	description: "slenderman is a fast and easy way to create a basic Svelte app. With a single command, you will have a running app, that you can then take apart and reassemble as you wish. \nThe app is set up to use Webpack, with svelte-loader, to compile your code. Webpack-dev-server will start up automatically to serve your app, and watch your files for changes (hot reloading!).",
+	// 	devIcons: ["nodejs_small", "npm", "svelte", "webpack"],
+	// }, 
 	{
 		title: "Papyracy",
 		imageUrl: null,
@@ -160,25 +173,7 @@ const projects = [
 		],
 		description: "My first Chrome extension. \nPapyracy leverages the fontastic power of Papyrus to quickly render any webpage nearly unreadable! Simply click the icon and all of the text will be Papyrus-ified!",
 		devIcons: ["javascript", "html5", "css3", "chrome"]
-	},
-	// {
-	// 	title: "CRUD burger",
-	// 	imageUrl: null,
-	// 	titleLinkUrl: "https://fierce-beach-30371.herokuapp.com/",
-	// 	links: [
-	// 		{
-	// 			linkTitle: "• CRUD burger- demo",
-	// 			linkUrl: "https://fierce-beach-30371.herokuapp.com/"
-	// 		},
-	// 		{
-	// 			linkTitle: "• repo available on",
-	// 			linkIcon: "github_full",
-	// 			linkUrl: "https://github.com/fermentationist/burger"
-	// 		}
-	// 	],
-	// 	description: "A simple full-stack CRUD app that lets you enter the name of a burger in a list, click a button to change the burger's status to \"eaten\", and with another click, delete burgers that have been \"eaten\". It uses a MySQL database with a homemade ORM, with Bootstrap and Handlebars on the front end.",
-	// 	devIcons: ["javascript", "html5", "css3", "bootstrap", "mysql"],
-	// },
+	}
 ]
 
 export default projects;
