@@ -32,7 +32,7 @@ const projects = [
 				linkUrl: "https://github.com/fermentationist/hot-dog-ma.git"
 			}
 		],
-		description: "A full stack React application that uses the OpenAI ChatGPT API to generate unique \"prayers\", based on a subject of the user's choosing. Disclaimer: Generated prayers may contain strong opinions about sandwich taxonomy.",
+		description: "A full stack React application that uses the OpenAI GPT-3 API to generate unique \"prayers\", based on a subject of the user's choosing. Disclaimer: Generated prayers may contain strong opinions about sandwich taxonomy.",
 		devIcons: ["html5", "css3", "react", "nodejs_small", "OpenAI"],
 	},
 	{
