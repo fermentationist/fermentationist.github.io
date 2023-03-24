@@ -85,17 +85,22 @@ const projects = [
 		devIcons: ["javascript", "webpack"],
 	},
 	{
-		title: "Node Blog Post Generator",
-		titleLinkUrl: "https://github.com/fermentationist/node-blog-post-generator",
+		title: "OpenAI Markdown Generator",
+		titleLinkUrl: "https://www.npmjs.com/package/openai-md",
 		links: [
+			{
+				linkTitle: "• module available on",
+				linkIcon: "npm",
+				linkUrl: "https://www.npmjs.com/package/openai-md"
+			},
 			{
 				linkTitle: "• repo available on",
 				linkIcon: "github_full",
-				linkUrl: "https://github.com/fermentationist/node-blog-post-generator"
+				linkUrl: "https://github.com/fermentationist/openai-md.git"
 			},
 		],
-		description: "A Node.js app that uses the OpenAI API to create blog posts and save them as markdown files. Can be used as a command line tool or imported as a module.",
-		devIcons: ["nodejs_small", "OpenAI"],
+		description: "A Typescript package/Node.js command-line tool that uses the OpenAI API to generate content in the form of markdown files.",
+		devIcons: ["nodejs_small", "typescript_badge", "npm", "OpenAI"],
 	},
 	{
 		title: "woke-dyno",
