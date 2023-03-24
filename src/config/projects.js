@@ -36,6 +36,24 @@ const projects = [
 		devIcons: ["html5", "css3", "react", "nodejs_small", "OpenAI"],
 	},
 	{
+		title: "OpenAI Markdown Generator",
+		titleLinkUrl: "https://www.npmjs.com/package/openai-md",
+		links: [
+			{
+				linkTitle: "• module available on",
+				linkIcon: "npm",
+				linkUrl: "https://www.npmjs.com/package/openai-md"
+			},
+			{
+				linkTitle: "• repo available on",
+				linkIcon: "github_full",
+				linkUrl: "https://github.com/fermentationist/openai-md.git"
+			},
+		],
+		description: "A Typescript package/Node.js command-line tool that uses the OpenAI API to generate content in the form of markdown files.",
+		devIcons: ["nodejs_small", "typescript_badge", "npm", "OpenAI"],
+	},
+	{
 		title: "Urly URL Shortener (full stack)",
 		titleLinkUrl: "https://urly.onrender.com",
 		links: [
@@ -83,24 +101,6 @@ const projects = [
 		],
 		description: "As a fan of old Infocom interactive fiction games, I thought it would be fun to hide a text adventure in the browser's console. Open the JavaScript console in your browser's developer tools to check it out!",
 		devIcons: ["javascript", "webpack"],
-	},
-	{
-		title: "OpenAI Markdown Generator",
-		titleLinkUrl: "https://www.npmjs.com/package/openai-md",
-		links: [
-			{
-				linkTitle: "• module available on",
-				linkIcon: "npm",
-				linkUrl: "https://www.npmjs.com/package/openai-md"
-			},
-			{
-				linkTitle: "• repo available on",
-				linkIcon: "github_full",
-				linkUrl: "https://github.com/fermentationist/openai-md.git"
-			},
-		],
-		description: "A Typescript package/Node.js command-line tool that uses the OpenAI API to generate content in the form of markdown files.",
-		devIcons: ["nodejs_small", "typescript_badge", "npm", "OpenAI"],
 	},
 	{
 		title: "woke-dyno",
