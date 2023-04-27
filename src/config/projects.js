@@ -1,21 +1,36 @@
 const projects = [
 	{
-		title: "Wordle Assistant",
-		imageUrl: "https://dennis-hodges.com/wordle-assistant/icons/android-icon-48x48.png",
-		titleLinkUrl: "https://dennis-hodges.com/wordle-assistant/",
+		title: "Chat Console",
+		imageUrl: null,
+		titleLinkUrl: "https://chat-console.onrender.com/",
 		links: [
 			{
-				linkTitle: "• Wordle Assistant - demo",
-				linkUrl: "https://dennis-hodges.com/wordle-assistant/"
+				linkTitle: "• repo available on",
+				linkIcon: "github_full",
+				linkUrl: "https://github.com/fermentationist/chat-console.git"
+			}
+		],
+		description: "A chat application hidden in the browser's JavaScript console. Built with JavaScript and Node.js, it uses websockets to allow multiple users to chat in real time.\n \n \nDemo - To try it out, open the console. (Press F12 or right-click and select \"Inspect\")",
+		devIcons: ["javascript", "nodejs_small", "websockets"],
+	},
+	{
+		title: "ConsoleGame",
+		imageUrl: null,
+		titleLinkUrl: "https://console-game.onrender.com/",
+		links: [
+			{
+				linkTitle: "• ConsoleGame - demo",
+				linkIcon: null,
+				linkUrl: "https://console-game.onrender.com/"
 			},
 			{
 				linkTitle: "• repo available on",
 				linkIcon: "github_full",
-				linkUrl: "https://github.com/fermentationist/wordle-assistant"
+				linkUrl: "https://github.com/fermentationist/ConsoleGame.git"
 			}
 		],
-		description: "A Progressive Web Application (PWA), built with React, that helps the user solve Wordle puzzles. The user enters the feedback (colors) from each Wordle guess, in order to see a filtered list of all remaining words.",
-		devIcons: ["html5", "css3", "react"],
+		description: "An AI-powered text adventure game, playable in the browser's JavaScript console.",
+		devIcons: ["typescript_badge", "rollup", "nodejs_small", "OpenAI"],
 	},
 	{
 		title: "Hot Dog-ma",
@@ -34,6 +49,24 @@ const projects = [
 		],
 		description: "A full stack React application that uses the OpenAI GPT-3 API to generate unique \"prayers\", based on a subject of the user's choosing. Disclaimer: Generated prayers may contain strong opinions about sandwich taxonomy.",
 		devIcons: ["html5", "css3", "react", "nodejs_small", "OpenAI"],
+	},
+	{
+		title: "Wordle Assistant",
+		imageUrl: "https://dennis-hodges.com/wordle-assistant/icons/android-icon-48x48.png",
+		titleLinkUrl: "https://dennis-hodges.com/wordle-assistant/",
+		links: [
+			{
+				linkTitle: "• Wordle Assistant - demo",
+				linkUrl: "https://dennis-hodges.com/wordle-assistant/"
+			},
+			{
+				linkTitle: "• repo available on",
+				linkIcon: "github_full",
+				linkUrl: "https://github.com/fermentationist/wordle-assistant"
+			}
+		],
+		description: "A Progressive Web Application (PWA), built with React, that helps the user solve Wordle puzzles. The user enters the feedback (colors) from each Wordle guess, in order to see a filtered list of all remaining words.",
+		devIcons: ["html5", "css3", "react"],
 	},
 	{
 		title: "OpenAI Markdown Generator",
@@ -82,25 +115,6 @@ const projects = [
 		],
 		description: "An second implementation of the URL shortener's back end, this time in Python, using FastAPI",
 		devIcons: ["python", "FastAPI", "SQLite"],
-	},
-	{
-		title: "ConsoleGame",
-		imageUrl: null,
-		titleLinkUrl: "https://github.com/fermentationist/ConsoleGame.git",
-		links: [
-			{
-				linkTitle: "• to play, open the browser console (dev tools) by right-clicking on the screen and selecting \"Inspect\". Then select the \"Console\" tab if it is not already selected. You can also access the console by pressing F12 (or Cmd-Opt-i on Mac, or Ctrl-Shift-i on Windows and Linux).",
-				linkIcon: null,
-				linkUrl: null
-			},
-			{
-				linkTitle: "• repo available on",
-				linkIcon: "github_full",
-				linkUrl: "https://github.com/fermentationist/ConsoleGame.git"
-			}
-		],
-		description: "As a fan of old Infocom interactive fiction games, I thought it would be fun to hide a text adventure in the browser's console. Open the JavaScript console in your browser's developer tools to check it out!",
-		devIcons: ["javascript", "webpack"],
 	},
 	{
 		title: "woke-dyno",

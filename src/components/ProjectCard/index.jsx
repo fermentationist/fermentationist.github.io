@@ -135,7 +135,11 @@ const ProjectCard = props => {
 			{props.imageUrl ? 
 			(<img className="project-image" src={props.imageUrl} alt={props.title}/>) : null
 			}
-			<p className="project-description">{props.description}</p> 
+			{
+				props.description.split("\n").map((line, i) => (
+					<p className="project-description" key={i}>{line}</p>
+				))
+			}
 			<ul className="project-links">
 				{links}
 			</ul>
