@@ -29,7 +29,7 @@ const projects = [
 				linkUrl: "https://github.com/fermentationist/ConsoleGame.git"
 			}
 		],
-		description: "An AI-powered text adventure game, playable in the browser's JavaScript console.",
+		description: "An AI-powered text adventure game, playable in the browser's JavaScript console, written in Typescript.",
 		devIcons: ["typescript_badge", "rollup", "nodejs_small", "OpenAI"],
 	},
 	{
