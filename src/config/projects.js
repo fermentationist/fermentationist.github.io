@@ -10,8 +10,8 @@ const projects = [
 				linkUrl: "https://github.com/fermentationist/chat-console.git"
 			}
 		],
-		description: "A chat application hidden in the browser's JavaScript console. Built with JavaScript and Node.js, it uses websockets to allow multiple users to chat in real time.\n \n \nDemo - To try it out, open the console. (Press F12 or right-click and select \"Inspect\")",
-		devIcons: ["javascript", "nodejs_small", "websockets"],
+		description: "A chat application hidden in the browser's JavaScript console. Built with JavaScript and Node.js, it uses websockets to allow multiple users to chat in real time.\n The chatroom features a chatbot powered by OpenAI.\n \n \nDemo - To try it out, open the console. (Press F12 or right-click and select \"Inspect\")",
+		devIcons: ["javascript", "OpenAI", "nodejs_small", "websockets"],
 	},
 	{
 		title: "ConsoleGame",
