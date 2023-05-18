@@ -2,7 +2,7 @@ const projects = [
 	{
 		title: "Chat Console",
 		imageUrl: null,
-		titleLinkUrl: "https://chat-console.onrender.com/",
+		titleLinkUrl: "https://github.com/fermentationist/chat-console.git",
 		links: [
 			{
 				linkTitle: "• repo available on",
@@ -11,7 +11,7 @@ const projects = [
 			}
 		],
 		description: "A chat application hidden in the browser's JavaScript console. Built with JavaScript and Node.js, it uses websockets to allow multiple users to chat in real time.\n The chatroom features a chatbot powered by OpenAI.\n \n \nDemo - To try it out, open the console. (Press F12 or right-click and select \"Inspect\")",
-		devIcons: ["javascript", "OpenAI", "nodejs_small", "websockets"],
+		devIcons: ["javascript", "OpenAI", "nodejs_small", "websockets", "jest"],
 	},
 	{
 		title: "ConsoleGame",
@@ -101,7 +101,7 @@ const projects = [
 			},
 		],
 		description: "A full stack URL shortener that uses a SQLite database with an Express server and a React front end.",
-		devIcons: ["html5", "css3", "react", "nodejs_small", "SQLite"],
+		devIcons: ["html5", "css3", "react", "nodejs_small", "SQLite", "Mocha"],
 	},
 	{
 		title: "Url-Py URL Shortener (back end only)",
