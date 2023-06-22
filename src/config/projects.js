@@ -1,5 +1,24 @@
 const projects = [
 	{
+		title: "Bottom Lounge Chatbot",
+		imageUrl: null,
+		titleLinkUrl: "https://bottom-lounge-chatbot.onrender.com/",
+		links: [
+			{
+				linkTitle: "• Bottom Lounge Chatbot - demo",
+				linkIcon: null,
+				linkUrl: "https://bottom-lounge-chatbot.onrender.com/"
+			},
+			{
+				linkTitle: "• repo available on",
+				linkIcon: "github_full",
+				linkUrl: "https://github.com/fermentationist/bottom-lounge-chatbot.git"
+			}
+		],
+		description: "A chatbot, written in Node.js, that helps users find upcoming events at Bottom Lounge in Chicago and answers general questions about the venue. It uses OpenAI's ChatGPT API, in conjunction with information scraped from the venue's website with Puppeteer, as well as real-time event data from the Ticketmaster API.",
+		devIcons: ["nodejs_small", "OpenAI", "Puppeteer", "react", "jest"],
+	},
+	{
 		title: "Chat Console",
 		imageUrl: null,
 		titleLinkUrl: "https://github.com/fermentationist/chat-console.git",
@@ -30,7 +49,7 @@ const projects = [
 			}
 		],
 		description: "An AI-powered text adventure game, playable in the browser's JavaScript console, written in Typescript.",
-		devIcons: ["typescript_badge", "rollup", "nodejs_small", "OpenAI"],
+		devIcons: ["typescript_badge", "Rollup", "nodejs_small", "OpenAI"],
 	},
 	{
 		title: "Hot Dog-ma",
