@@ -285,13 +285,27 @@
 
       .project-card {
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 1fr auto auto;
         gap: 2rem;
         align-items: start;
         padding: 2.5rem 2.75rem;
         margin: 0 -2.75rem;
         border-top: 1px solid var(--border);
         transition: background-color 0.22s ease;
+      }
+
+      .project-screenshot {
+        display: block;
+        width: 220px;
+        height: auto;
+        border: 1px solid var(--border);
+        opacity: 0.75;
+        transition: opacity 0.22s ease;
+        flex-shrink: 0;
+      }
+
+      .project-screenshot:hover {
+        opacity: 1;
       }
 
       .project-card:hover {
@@ -364,6 +378,8 @@
         align-self: start;
         margin-top: 0.35rem;
         flex-shrink: 0;
+        width: fit-content;
+        margin-block-end: 0.75rem;
       }
 
       .project-badge[data-status="in-progress"] {
@@ -436,9 +452,15 @@
           padding: 2rem 1.5rem;
         }
 
-        .project-badge {
-          width: fit-content;
+        .project-screenshot {
+          width: 100%;
+          max-width: 420px;
         }
+
+        /* .project-badge {
+          width: fit-content;
+          margin-block-end: 0.75rem;
+        } */
 
         .footer-links {
           gap: 1.75rem;
@@ -485,6 +507,9 @@
             <li class="project-card" data-a="5">
               <div>
                 <h2 class="project-title">notapipe</h2>
+                <div class="project-badge" data-status="in-progress">
+                  Work in Progress
+                </div>
                 <p class="project-desc">
                   A browser-based, peer-to-peer ephemeral data bridge. Routes
                   data directly between peers — no server relay, no storage. The
@@ -507,6 +532,17 @@
                   >
                 </div>
               </div>
+              <a
+                href="https://notapipe.app/info"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  class="project-screenshot"
+                  src="/screenshots/notapipe.png"
+                  alt="notapipe screenshot"
+                />
+              </a>
             </li>
           </ul>
           <br />
@@ -538,9 +574,17 @@
                   >
                 </div>
               </div>
-              <span class="project-badge" data-status="in-progress"
-                >Work in Progress</span
+              <a
+                href="https://dennis-hodges.com/trub"
+                target="_blank"
+                rel="noopener noreferrer"
               >
+                <img
+                  class="project-screenshot"
+                  src="/screenshots/trub.png"
+                  alt="Trub screenshot"
+                />
+              </a>
             </li>
           </ul>
         </section>
