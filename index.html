@@ -366,7 +366,7 @@
         flex-shrink: 0;
       }
 
-      .project-badge[data-status="complete"] {
+      .project-badge[data-status="in-progress"] {
         color: var(--accent);
         border-color: var(--accent);
       }
@@ -478,7 +478,7 @@
         </section>
 
         <section class="projects-section">
-          <p class="section-label" data-a="4">Current Project</p>
+          <p class="section-label" data-a="4">Selecte Projects</p>
 
           <ul class="project-list">
             <li class="project-card" data-a="5">
@@ -506,14 +506,9 @@
                   >
                 </div>
               </div>
-              <!-- <span class="project-badge" data-status="complete">Complete</span> -->
             </li>
           </ul>
-        </section>
-
-        <section class="projects-section">
-          <p class="section-label" data-a="5">In Progress</p>
-
+          <br />
           <ul class="project-list">
             <li class="project-card" data-a="5">
               <div>
@@ -542,6 +537,9 @@
                   >
                 </div>
               </div>
+              <span class="project-badge" data-status="in-progress"
+                >Work in Progress</span
+              >
             </li>
           </ul>
         </section>
