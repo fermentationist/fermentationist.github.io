@@ -1,6 +1,8 @@
 {
   "name": "fermentationist.github.io",
   "private": false,
+  "description": "Personal website of fermentationist, a software developer and open source enthusiast",
+  "author": "Dennis Hodges <https://github.com/fermentationist>",
   "version": "1.0.0",
   "homepage": "https://fermentationist.github.io",
   "type": "module",
